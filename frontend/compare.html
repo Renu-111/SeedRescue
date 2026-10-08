@@ -1,0 +1,37 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>SeedRescue · Compare</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#0f172a;color:#e2e8f0;padding:20px}
+h1{color:#4ade80;margin:0 0 4px}a{color:#38bdf8}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.card{background:#1e293b;padding:14px;border-radius:10px}label{display:block;font-size:12px;color:#94a3b8;margin-top:8px}
+input,select{width:100%;padding:6px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px}
+button{padding:10px 18px;border:0;border-radius:6px;background:#22c55e;color:#04210f;font-weight:700;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin-top:10px}td,th{padding:8px;border-bottom:1px solid #334155;text-align:left}
+.up{color:#f87171;font-weight:700}.dn{color:#4ade80;font-weight:700}
+</style></head><body>
+<h1>⚖️ Scenario Comparison</h1><a href="/">← back to dashboard</a>
+<div class="grid" id="forms"></div><button onclick="go()">Unfold both seeds & compare</button>
+<div id="out"></div>
+<script>
+const F=[['disaster','Disaster','select'],['population','Population'],['damage','Damage %'],['water','Water (L)'],['food','Food (kg)'],['medical','Medical beds'],['shelter_capacity','Shelter capacity'],['blocked','Blocked roads (e.g. R1,R3,R9)']];
+const V={A:{disaster:'flood',population:10000,damage:40,water:60000,food:3000,medical:150,shelter_capacity:4000,blocked:'R1'},
+         B:{disaster:'flood',population:15000,damage:55,water:60000,food:3000,medical:150,shelter_capacity:4000,blocked:'R1,R3,R9,R6'}};
+forms.innerHTML=['A','B'].map(k=>`<div class="card"><h3>Scenario ${k}</h3>`+F.map(([f,l,t])=>
+ t=='select'?`<label>${l}</label><select id="${k}_${f}">${['flood','earthquake','cyclone','landslide'].map(o=>`<option ${V[k][f]==o?'selected':''}>${o}</option>`).join('')}</select>`
+ :`<label>${l}</label><input id="${k}_${f}" value="${V[k][f]}">`).join('')+'</div>').join('');
+const seed=k=>{const s={};F.forEach(([f])=>{const v=document.getElementById(k+'_'+f).value;
+ s[f]=f=='disaster'?v:f=='blocked'?v.split(',').map(x=>x.trim()).filter(Boolean):+v});return s};
+async function go(){
+ const r=await (await fetch('/api/compare',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({a:seed('A'),b:seed('B')})})).json();
+ const row=(n,a,b,lowBad)=>{const d=b-a;const cls=d==0?'':((lowBad?d>0:d<0)?'up':'dn');
+  return `<tr><td>${n}</td><td>${a.toLocaleString()}</td><td>${b.toLocaleString()}</td><td class="${cls}">${d>0?'+':''}${Math.round(d*10)/10}</td></tr>`};
+ out.innerHTML=`<div class="card"><h3>What changed when the seed changed?</h3><table><tr><th>Metric</th><th>A</th><th>B</th><th>Change</th></tr>`
+  +row('Risk score',r.a.risk,r.b.risk,true)+row('Recovery score',r.a.recovery_score,r.b.recovery_score,false)
+  +row('People displaced',r.a.displaced,r.b.displaced,true)+row('People sheltered',r.a.sheltered,r.b.sheltered,false)
+  +row('Safe roads',r.a.accessible_roads,r.b.accessible_roads,false)+row('Medical demand',r.a.demand.medical,r.b.demand.medical,true)
+  +row('Water shortage (L)',r.a.shortage.water,r.b.shortage.water,true)
+  +(r.a.ml?row('AI-predicted risk',r.a.ml.risk,r.b.ml.risk,true):'')
+  +`</table><h4>Why risk moved</h4><ul>${r.why.map(w=>`<li>${w}</li>`).join('')}</ul>
+  <p><b>Top priority:</b> ${r.a.priorities[0].name} → ${r.b.priorities[0].name} ${r.top_priority_changed?'<span class="up">(CHANGED)</span>':'(same)'}</p>
+  <p><i>Seed → Unfolding → Manifestation: a small change in the seed produced a different recovery structure.</i></p></div>`}
+go();
+</script></body></html>

@@ -1,0 +1,7782 @@
+<!DOCTYPE html>
+
+
+
+<html lang="en">
+
+
+
+<head>
+
+
+
+  <meta charset="utf-8">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+  <title>SeedRescue — Disaster Recovery Command Center</title>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+
+
+
+
+
+  <style>
+
+
+
+    * {
+
+
+
+      box-sizing: border-box;
+
+
+
+    }
+
+
+
+
+
+
+
+    body {
+
+
+
+      margin: 0;
+
+
+
+      font-family: system-ui, -apple-system, sans-serif;
+
+
+
+      background: #0f172a;
+
+
+
+      color: #e2e8f0;
+
+
+
+      display: grid;
+
+
+
+      grid-template-columns: 330px 1fr 360px;
+
+
+
+      grid-template-rows: 56px 1fr;
+
+
+
+      height: 100vh;
+
+
+
+      overflow: hidden;
+
+
+
+    }
+
+
+
+
+
+
+
+    header {
+
+
+
+      grid-column: 1 / 4;
+
+
+
+      background: #1e293b;
+
+
+
+      padding: 0 20px;
+
+
+
+      display: flex;
+
+
+
+      align-items: center;
+
+
+
+      justify-content: space-between;
+
+
+
+      border-bottom: 1px solid #334155;
+
+
+
+      gap: 15px;
+
+
+
+    }
+
+
+
+
+
+
+
+    header b {
+
+
+
+      font-size: 20px;
+
+
+
+      color: #4ade80;
+
+
+
+    }
+
+
+
+
+
+
+
+    header span {
+
+
+
+      color: #94a3b8;
+
+
+
+      font-size: 13px;
+
+
+
+    }
+
+
+
+
+
+
+
+    header a {
+
+
+
+      color: #38bdf8;
+
+
+
+      text-decoration: none;
+
+
+
+      font-size: 13px;
+
+
+
+      font-weight: 600;
+
+
+
+    }
+
+
+
+
+
+
+
+    aside {
+
+
+
+      padding: 16px;
+
+
+
+      overflow-y: auto;
+
+
+
+      background: #111c33;
+
+
+
+    }
+
+
+
+
+
+
+
+    aside::-webkit-scrollbar {
+
+
+
+      width: 5px;
+
+
+
+    }
+
+
+
+
+
+
+
+    aside::-webkit-scrollbar-thumb {
+
+
+
+      background: #334155;
+
+
+
+      border-radius: 3px;
+
+
+
+    }
+
+
+
+
+
+
+
+    #map {
+
+
+
+      height: 100%;
+
+
+
+      width: 100%;
+
+
+
+      background: #0f172a;
+
+
+
+    }
+
+
+
+
+
+
+
+    label {
+
+
+
+      display: block;
+
+
+
+      font-size: 12px;
+
+
+
+      color: #94a3b8;
+
+
+
+      margin-top: 10px;
+
+
+
+      margin-bottom: 2px;
+
+
+
+    }
+
+
+
+
+
+
+
+    input[type="number"],
+
+
+
+    select {
+
+
+
+      width: 100%;
+
+
+
+      padding: 7px;
+
+
+
+      background: #0f172a;
+
+
+
+      color: #e2e8f0;
+
+
+
+      border: 1px solid #334155;
+
+
+
+      border-radius: 6px;
+
+
+
+      outline: none;
+
+
+
+    }
+
+
+
+
+
+
+
+    input[type="range"] {
+
+
+
+      width: 100%;
+
+
+
+      accent-color: #22c55e;
+
+
+
+      cursor: pointer;
+
+
+
+    }
+
+
+
+
+
+
+
+    .roads {
+
+
+
+      display: flex;
+
+
+
+      flex-wrap: wrap;
+
+
+
+      gap: 4px;
+
+
+
+      margin-top: 6px;
+
+
+
+    }
+
+
+
+
+
+
+
+    .roads label {
+
+
+
+      display: inline-flex;
+
+
+
+      align-items: center;
+
+
+
+      gap: 4px;
+
+
+
+      margin: 0;
+
+
+
+      background: #1e293b;
+
+
+
+      padding: 3px 6px;
+
+
+
+      border-radius: 4px;
+
+
+
+      font-size: 11px;
+
+
+
+      cursor: pointer;
+
+
+
+      color: #e2e8f0;
+
+
+
+    }
+
+
+
+
+
+
+
+    button {
+
+
+
+      width: 100%;
+
+
+
+      margin-top: 8px;
+
+
+
+      padding: 8px 10px;
+
+
+
+      border: 0;
+
+
+
+      border-radius: 6px;
+
+
+
+      background: #334155;
+
+
+
+      color: #e2e8f0;
+
+
+
+      font-weight: 600;
+
+
+
+      font-size: 12px;
+
+
+
+      cursor: pointer;
+
+
+
+    }
+
+
+
+
+
+
+
+    button:hover {
+
+
+
+      background: #475569;
+
+
+
+    }
+
+
+
+
+
+
+
+    button:disabled {
+
+
+
+      opacity: 0.6;
+
+
+
+      cursor: wait;
+
+
+
+    }
+
+
+
+
+
+
+
+    .btn-weather {
+
+
+
+      background: #0284c7;
+
+
+
+      color: #fff;
+
+
+
+    }
+
+
+
+
+
+
+
+    .btn-hazard {
+
+
+
+      background: #dc2626;
+
+
+
+      color: #fff;
+
+
+
+    }
+
+
+
+
+
+
+
+    .btn-bottleneck {
+
+
+
+      background: #d97706;
+
+
+
+      color: #fff;
+
+
+
+    }
+
+
+
+
+
+
+
+    .btn-compare {
+
+
+
+      background: #22c55e;
+
+
+
+      color: #04210f;
+
+
+
+    }
+
+
+
+
+
+
+
+    .btn-print {
+
+
+
+      background: #16a34a;
+
+
+
+      color: #fff;
+
+
+
+    }
+
+
+
+
+
+
+
+    .kpis {
+
+
+
+      display: grid;
+
+
+
+      grid-template-columns: 1fr 1fr;
+
+
+
+      gap: 8px;
+
+
+
+    }
+
+
+
+
+
+
+
+    .k {
+
+
+
+      background: #1e293b;
+
+
+
+      padding: 10px;
+
+
+
+      border-radius: 8px;
+
+
+
+      border-left: 3px solid #334155;
+
+
+
+    }
+
+
+
+
+
+
+
+    .k small {
+
+
+
+      color: #94a3b8;
+
+
+
+      font-size: 11px;
+
+
+
+    }
+
+
+
+
+
+
+
+    .k div {
+
+
+
+      font-size: 20px;
+
+
+
+      font-weight: 700;
+
+
+
+      margin-top: 2px;
+
+
+
+    }
+
+
+
+
+
+
+
+    .d {
+
+
+
+      font-size: 11px;
+
+
+
+      font-weight: 600;
+
+
+
+      display: block;
+
+
+
+      margin-top: 2px;
+
+
+
+    }
+
+
+
+
+
+
+
+    .up {
+
+
+
+      color: #f87171;
+
+
+
+    }
+
+
+
+
+
+
+
+    .dn {
+
+
+
+      color: #4ade80;
+
+
+
+    }
+
+
+
+
+
+
+
+    h4 {
+
+
+
+      margin: 16px 0 6px;
+
+
+
+      color: #4ade80;
+
+
+
+      font-size: 12px;
+
+
+
+      text-transform: uppercase;
+
+
+
+      letter-spacing: 0.5px;
+
+
+
+    }
+
+
+
+
+
+
+
+    .bar {
+
+
+
+      background: #1e293b;
+
+
+
+      border-radius: 4px;
+
+
+
+      height: 7px;
+
+
+
+      margin: 2px 0 6px;
+
+
+
+      overflow: hidden;
+
+
+
+    }
+
+
+
+
+
+
+
+    .bar i {
+
+
+
+      display: block;
+
+
+
+      height: 100%;
+
+
+
+      border-radius: 4px;
+
+
+
+      background: #f59e0b;
+
+
+
+    }
+
+
+
+
+
+
+
+    .card-box {
+
+
+
+      background: #1e293b;
+
+
+
+      padding: 10px;
+
+
+
+      border-radius: 8px;
+
+
+
+      margin-top: 6px;
+
+
+
+      font-size: 12px;
+
+
+
+      line-height: 1.4;
+
+
+
+    }
+
+
+
+
+
+
+
+    .directive {
+
+
+
+      border-left: 3px solid #38bdf8;
+
+
+
+      padding-left: 8px;
+
+
+
+      margin-bottom: 6px;
+
+
+
+    }
+
+
+
+
+
+
+
+    .critical-tag {
+
+
+
+      background: #ef4444;
+
+
+
+      color: white;
+
+
+
+      padding: 2px 5px;
+
+
+
+      border-radius: 4px;
+
+
+
+      font-size: 10px;
+
+
+
+      font-weight: 700;
+
+
+
+    }
+
+
+
+
+
+
+
+    .status {
+
+
+
+      font-size: 11px;
+
+
+
+      color: #94a3b8;
+
+
+
+      margin-top: 7px;
+
+
+
+      min-height: 16px;
+
+
+
+    }
+
+
+
+    .location-status {
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #cbd5e1;
+    font-size: 11px;
+}
+
+
+
+
+    .location-status.ready {
+
+      border-color: #22c55e;
+
+      color: #bbf7d0;
+
+    }
+
+
+
+    .location-status.waiting {
+
+      border-color: #f59e0b;
+
+      color: #fde68a;
+
+    }
+
+
+
+
+
+
+
+
+
+    ol {
+
+
+
+      padding-left: 18px;
+
+
+
+      margin: 0;
+
+
+
+      font-size: 12px;
+
+
+
+    }
+
+
+
+
+
+
+
+    table {
+
+
+
+      width: 100%;
+
+
+
+      font-size: 12px;
+
+
+
+      border-collapse: collapse;
+
+
+
+      margin-top: 4px;
+
+
+
+    }
+
+
+
+
+
+
+
+    td,
+
+
+
+    th {
+
+
+
+      padding: 4px 6px;
+
+
+
+      text-align: left;
+
+
+
+      border-bottom: 1px solid #334155;
+
+
+
+    }
+
+
+
+
+
+
+
+    th {
+
+
+
+      color: #94a3b8;
+
+
+
+    }
+
+
+
+
+
+
+
+    .legend {
+
+
+
+      position: absolute;
+
+
+
+      bottom: 18px;
+
+
+
+      left: 50%;
+
+
+
+      transform: translateX(-50%);
+
+
+
+      z-index: 1000;
+
+
+
+      background: rgba(15, 23, 42, 0.92);
+
+
+
+      padding: 7px 12px;
+
+
+
+      border-radius: 8px;
+
+
+
+      font-size: 11px;
+
+
+
+      border: 1px solid #334155;
+
+
+
+    }
+
+
+
+
+
+
+
+    .legend span {
+
+
+
+      margin-right: 10px;
+
+
+
+      white-space: nowrap;
+
+
+
+    }
+
+
+
+
+
+
+
+    @media (max-width: 1000px) {
+
+
+
+      body {
+
+
+
+        display: block;
+
+
+
+        height: auto;
+
+
+
+        overflow: auto;
+
+
+
+      }
+
+
+
+
+
+
+
+      header {
+
+
+
+        height: 56px;
+
+
+
+      }
+
+
+
+
+
+
+
+      aside {
+
+
+
+        min-height: auto;
+
+
+
+      }
+
+
+
+
+
+
+
+      #map {
+
+
+
+        height: 55vh;
+
+
+
+        min-height: 400px;
+
+
+
+      }
+
+
+
+    }
+
+
+
+
+
+
+
+    @media print {
+
+
+
+      body {
+
+
+
+        display: block;
+
+
+
+        background: #fff;
+
+
+
+        color: #000;
+
+
+
+        height: auto;
+
+
+
+        overflow: visible;
+
+
+
+      }
+
+
+
+
+
+
+
+      header,
+
+
+
+      aside:first-of-type,
+
+
+
+      #map,
+
+
+
+      button,
+
+
+
+      .legend {
+
+
+
+        display: none !important;
+
+
+
+      }
+
+
+
+
+
+
+
+      aside:last-of-type {
+
+
+
+        width: 100%;
+
+
+
+        padding: 20px;
+
+
+
+        background: #fff;
+
+
+
+        color: #000;
+
+
+
+      }
+
+
+
+
+
+
+
+      .k,
+
+
+
+      .card-box {
+
+
+
+        background: #f1f5f9;
+
+
+
+        border: 1px solid #cbd5e1;
+
+
+
+        color: #000;
+
+
+
+      }
+
+
+
+
+
+
+
+      h4 {
+
+
+
+        color: #0f172a;
+
+
+
+        border-bottom: 2px solid #0f172a;
+
+
+
+      }
+
+
+
+
+
+
+
+      .bar {
+
+
+
+        background: #e2e8f0;
+
+
+
+      }
+
+
+
+    }
+
+
+
+  
+    .priority-panel {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .priority-panel h2 {
+      margin: 0 0 4px;
+      color: #4ade80;
+      font-size: 14px;
+    }
+
+    .section-description {
+      margin: 0 0 8px;
+      color: #94a3b8;
+      font-size: 11px;
+    }
+
+    .zone-priority-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-left: 4px solid #64748b;
+      border-radius: 7px;
+      padding: 9px;
+      margin-top: 7px;
+    }
+
+    .zone-priority-card.critical { border-left-color: #ef4444; }
+    .zone-priority-card.high { border-left-color: #f97316; }
+    .zone-priority-card.medium { border-left-color: #eab308; }
+    .zone-priority-card.low { border-left-color: #22c55e; }
+
+    .priority-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .priority-rank {
+      font-weight: 800;
+      color: #e2e8f0;
+    }
+
+    .priority-score {
+      font-weight: 800;
+      color: #38bdf8;
+    }
+
+    .priority-level {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .priority-level.critical { background: #ef4444; }
+    .priority-level.high { background: #f97316; }
+    .priority-level.medium { background: #eab308; color: #111827; }
+    .priority-level.low { background: #16a34a; }
+
+    .priority-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 8px;
+      margin-top: 7px;
+      color: #cbd5e1;
+      font-size: 11px;
+    }
+
+    .priority-reasons {
+      margin: 7px 0 0;
+      padding-left: 17px;
+      color: #cbd5e1;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .priority-empty {
+      color: #94a3b8;
+      font-size: 11px;
+      padding: 5px 0;
+    }
+
+  </style>
+
+
+
+</head>
+
+
+
+
+
+
+
+<body>
+
+
+
+
+
+
+
+<header>
+
+
+
+  <div>
+
+
+
+    <b>🌱 SeedRescue Command</b>
+
+
+
+    <span>Seed → Unfolding → Manifested Recovery Plan</span>
+
+
+
+  </div>
+
+
+
+
+
+
+
+  <div>
+
+
+
+    <a href="/compare.html">⚖️ Scenario Comparison →</a>
+
+
+
+  </div>
+
+
+
+</header>
+
+
+
+
+
+
+
+
+
+
+
+<!-- ================= LEFT SIDEBAR ================= -->
+
+
+
+
+
+
+
+<aside>
+
+
+
+
+
+
+
+  <h4 style="margin-top:0;">
+
+
+
+    1 · Disaster Seed & Sensors
+
+
+
+  </h4>
+
+
+
+
+
+
+
+  <button
+
+
+
+    class="btn-weather"
+
+
+
+    id="weatherBtn"
+
+
+
+    onclick="fetchLiveWeather()">
+
+
+
+    ⚡ Auto-Seed via Live Weather
+
+
+
+  </button>
+
+
+
+
+
+
+
+  <button
+
+
+
+    class="btn-hazard"
+
+
+
+    id="hazardBtn"
+
+
+
+    onclick="toggleHazardMode()">
+
+
+
+    🚨 Drop Hazard Zone on Map
+
+
+
+  </button>
+
+    <div
+
+      class="location-status waiting"
+
+      id="locationStatus"
+
+    >
+
+      📍 No incident location selected.<br>
+
+      Click “Drop Hazard Zone on Map”, then click the
+
+      disaster location on the Bengaluru map.
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+  <label for="disaster">
+
+
+
+    Disaster Type
+
+
+
+  </label>
+
+
+
+
+
+
+
+  <select id="disaster">
+
+
+
+    <option value="flood">Flood</option>
+
+
+
+    <option value="earthquake">Earthquake</option>
+
+
+
+    <option value="cyclone">Cyclone</option>
+
+
+
+    <option value="landslide">Landslide</option>
+
+
+
+  </select>
+
+
+
+
+
+
+
+
+
+
+
+  <label for="population">
+
+
+
+    Population Exposed:
+
+
+
+    <b id="v_population">10,000</b>
+
+
+
+  </label>
+
+
+
+
+
+
+
+  <input
+
+
+
+    type="range"
+
+
+
+    id="population"
+
+
+
+    min="2000"
+
+
+
+    max="30000"
+
+
+
+    step="500"
+
+
+
+    value="10000"
+
+
+
+  >
+
+
+
+
+
+
+
+
+
+
+
+  <label for="damage">
+
+
+
+    Infrastructure Damage:
+
+
+
+    <b id="v_damage">40%</b>
+
+
+
+  </label>
+
+
+
+
+
+
+
+  <input
+
+
+
+    type="range"
+
+
+
+    id="damage"
+
+
+
+    min="0"
+
+
+
+    max="100"
+
+
+
+    value="40"
+
+
+
+  >
+
+
+
+
+
+
+
+
+
+
+
+  <label for="water">
+
+
+
+    Water Reserve (Litres)
+
+
+
+  </label>
+
+
+
+
+
+
+
+  <input
+
+
+
+    type="number"
+
+
+
+    id="water"
+
+
+
+    value="60000"
+
+
+
+    min="0"
+
+
+
+  >
+
+
+
+
+
+
+
+
+
+
+
+  <label for="food">
+
+
+
+    Food Reserve (kg)
+
+
+
+  </label>
+
+
+
+
+
+
+
+  <input
+
+
+
+    type="number"
+
+
+
+    id="food"
+
+
+
+    value="3000"
+
+
+
+    min="0"
+
+
+
+  >
+
+
+
+
+
+
+
+
+
+
+
+  <label for="medical">
+
+
+
+    Medical Beds
+
+
+
+  </label>
+
+
+
+
+
+
+
+  <input
+
+
+
+    type="number"
+
+
+
+    id="medical"
+
+
+
+    value="150"
+
+
+
+    min="0"
+
+
+
+  >
+
+
+
+
+
+
+
+
+
+
+
+  <label for="shelter_capacity">
+
+
+
+    Shelter Beds
+
+
+
+  </label>
+
+
+
+
+
+
+
+  <input
+
+
+
+    type="number"
+
+
+
+    id="shelter_capacity"
+
+
+
+    value="4000"
+
+
+
+    min="0"
+
+
+
+  >
+
+
+
+
+
+
+
+
+
+
+
+  <label>
+
+
+
+    Blocked Road Segments
+
+
+
+  </label>
+
+
+
+
+
+
+
+  <div
+
+
+
+    class="roads"
+
+
+
+    id="roads">
+
+
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+  <button
+
+
+
+    class="btn-bottleneck"
+
+
+
+    onclick="runBottlenecks()">
+
+
+
+    🔍 Audit Road Vulnerabilities
+
+
+
+  </button>
+
+
+
+
+
+
+
+
+
+
+
+  <button
+
+
+
+    class="btn-compare"
+
+
+
+    onclick="location.href='/compare.html'">
+
+
+
+    ⚖️ Compare Scenario A vs B
+
+
+
+  </button>
+
+
+
+
+
+
+
+
+
+
+
+  <button onclick="lockBase()">
+
+
+
+    📌 Lock Current Plan as Baseline
+
+
+
+  </button>
+
+
+
+
+
+
+
+
+
+
+
+  <button onclick="reset()">
+
+
+
+    Reset Seed
+
+
+
+  </button>
+
+
+
+
+
+
+
+
+
+
+
+  <button
+
+
+
+    class="btn-print"
+
+
+
+    onclick="window.print()">
+
+
+
+    📄 Print / Export Official SitRep
+
+
+
+  </button>
+
+
+
+
+
+
+
+
+
+
+
+  <div
+
+
+
+    class="status"
+
+
+
+    id="status">
+
+
+
+    Ready.
+
+
+
+  </div>
+
+
+
+
+
+
+
+</aside>
+
+
+
+
+
+
+
+
+
+
+
+<!-- ================= MAP ================= -->
+
+
+
+
+
+
+
+<div id="map"></div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="legend">
+
+
+
+  <span>🟢 Safe route</span>
+
+
+
+  <span>🔴 Blocked road</span>
+
+
+
+  <span>🔵 Supply route</span>
+
+
+
+  <span>🏠 Shelter</span>
+
+
+
+  <span>🏥 Hospital</span>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!-- ================= RIGHT SIDEBAR ================= -->
+
+
+
+
+
+
+
+<aside>
+
+
+    <section class="priority-panel">
+      <h2>🎯 Zone Priority Ranking</h2>
+      <p class="section-description">
+        Adaptive recovery priorities based on risk, demand and accessibility
+      </p>
+      <div id="zonePriorityList">
+        <div class="priority-empty">
+          Generate a recovery plan to view zone priorities.
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+
+
+
+
+  <h4 style="margin-top:0;">
+
+
+
+    2 · Operational Intelligence
+
+
+
+  </h4>
+
+
+
+
+
+
+
+
+
+
+
+  <div
+
+
+
+    class="kpis"
+
+
+
+    id="kpis">
+
+
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+  <h4>
+
+
+
+    🎖️ AI Incident Commander Directives
+
+
+
+  </h4>
+
+
+
+
+
+
+
+  <div
+
+
+
+    class="card-box"
+
+
+
+    id="briefing">
+
+
+
+    Calculating directives...
+
+
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+  <div
+
+
+
+    id="bottleneckSection"
+
+
+
+    style="display:none;">
+
+
+
+
+
+
+
+    <h4>
+
+
+
+      ⚠️ Critical Road Bottlenecks
+
+
+
+    </h4>
+
+
+
+
+
+
+
+    <div
+
+
+
+      class="card-box"
+
+
+
+      id="bottleneckResults">
+
+
+
+    </div>
+
+
+
+
+
+
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+  <h4>
+
+
+
+    Recovery Priorities
+
+
+
+  </h4>
+
+
+
+
+
+
+
+  <ol id="prio"></ol>
+
+
+
+
+
+
+
+
+
+
+
+  <h4>
+
+
+
+    Risk Breakdown
+
+
+
+  </h4>
+
+
+
+
+
+
+
+  <div id="why"></div>
+
+
+
+
+
+
+
+
+
+
+
+  <h4>
+
+
+
+    Shelter Allocation Audit
+
+
+
+  </h4>
+
+
+
+
+
+
+
+  <table id="alloc"></table>
+
+
+
+
+
+
+
+
+
+
+
+  <h4>
+
+
+
+    Resource Shortages
+
+
+
+  </h4>
+
+
+
+
+
+
+
+  <div id="short"></div>
+
+
+
+
+
+
+
+</aside>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     GLOBAL STATE
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  let G = null;
+
+
+
+  let base = null;
+
+
+
+  let last = null;
+
+
+
+
+
+
+
+  let hazardMode = false;
+
+
+
+  let hazardCircle = null;
+
+
+
+  let hazardMarker = null;
+
+
+
+  let incidentLocation = null;
+
+
+
+  let locationSelected = false;
+
+
+
+  let timer = null;
+
+
+
+
+
+
+
+  const blocked = new Set();
+
+
+
+
+
+
+
+  const layer = L.layerGroup();
+
+
+
+  const hazardLayer = L.layerGroup();
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     MAP
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  const map = L.map('map').setView(
+
+
+
+    [12.968, 77.612],
+
+
+
+    13
+
+
+
+  );
+
+
+
+
+
+
+
+
+
+
+
+  L.tileLayer(
+
+
+
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+
+
+
+    {
+
+
+
+      attribution: '© OpenStreetMap contributors'
+
+
+
+    }
+
+
+
+  ).addTo(map);
+
+
+
+
+
+
+
+
+
+
+
+  layer.addTo(map);
+
+
+
+  hazardLayer.addTo(map);
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     HELPERS
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  const $ = id =>
+
+    document.getElementById(id);
+
+
+
+
+
+  // SeedRescue namespaced browser helpers.
+
+  // Runtime map code uses these directly, so it cannot fail if another
+
+  // script has an old/missing getRoadColor helper.
+
+  window.__seedRescueEscapeHtml = function(value) {
+
+    return String(value ?? '')
+
+      .replace(/&/g, '&amp;')
+
+      .replace(/</g, '&lt;')
+
+      .replace(/>/g, '&gt;')
+
+      .replace(/"/g, '&quot;')
+
+      .replace(/'/g, '&#039;');
+
+  };
+
+
+
+  window.__seedRescueFormatStatus = function(status) {
+
+    const names = {
+
+      blocked: 'Blocked',
+
+      orange: 'At Risk',
+
+      yellow: 'Warning',
+
+      safe: 'Safe'
+
+    };
+
+    return names[status] || String(status || 'Unknown');
+
+  };
+
+
+
+  window.__seedRescueGetRoadColor = function(status) {
+
+    const colors = {
+
+      blocked: '#dc2626',
+
+      orange: '#f97316',
+
+      yellow: '#eab308',
+
+      safe: '#16a34a'
+
+    };
+
+    return colors[status] || '#64748b';
+
+  };
+
+
+
+  // Keep the existing HTML helper name for the rest of the page, but make it
+
+  // delegate to the guaranteed namespace.
+
+  function escapeHtml(value) {
+
+    return window.__seedRescueEscapeHtml(value);
+
+  }
+
+
+
+
+
+  const ids = [
+
+
+
+    'disaster',
+
+
+
+    'population',
+
+
+
+    'damage',
+
+
+
+    'water',
+
+
+
+    'food',
+
+
+
+    'medical',
+
+
+
+    'shelter_capacity'
+
+
+
+  ];
+
+
+
+
+
+
+
+
+
+
+
+  const ICON = {
+
+
+
+    zone: '🏘️',
+
+
+
+    shelter: '🏠',
+
+
+
+    hospital: '🏥',
+
+
+
+    depot: '📦'
+
+
+
+  };
+
+
+
+
+
+
+
+
+
+
+
+  const DEF = {
+
+
+
+    disaster: 'flood',
+
+
+
+    population: 10000,
+
+
+
+    damage: 40,
+
+
+
+    water: 60000,
+
+
+
+    food: 3000,
+
+
+
+    medical: 150,
+
+
+
+    shelter_capacity: 4000
+
+
+
+  };
+
+
+
+
+
+
+
+
+
+
+
+  function setStatus(message) {
+
+
+
+    $('status').textContent = message;
+
+    document.documentElement.dataset.seedrescueBuild = 'location-pipeline-fixed-20261008-0745';
+
+
+
+    const box = $('locationStatus');
+
+
+
+    if (!box) {
+
+      return;
+
+    }
+
+
+
+    if (locationSelected && incidentLocation) {
+
+      box.className = 'location-status ready';
+
+
+
+      box.innerHTML = `
+
+        ✅ Incident location selected<br>
+
+        Latitude: ${incidentLocation.latitude.toFixed(6)}<br>
+
+        Longitude: ${incidentLocation.longitude.toFixed(6)}
+
+      `;
+
+    } else {
+
+      box.className = 'location-status waiting';
+
+
+
+      box.innerHTML = `
+
+        📍 No incident location selected.<br>
+
+        Select the hazard location on the map to enable
+
+        geographic population, shelter and route analysis.
+
+      `;
+
+    }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     BUILD DISASTER SEED
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  function seed() {
+
+
+
+    const s = {
+
+      blocked: [...blocked]
+
+    };
+
+
+
+    ids.forEach(id => {
+
+      s[id] =
+
+        id === 'disaster'
+
+          ? $(id).value
+
+          : Number($(id).value);
+
+    });
+
+
+
+    if (locationSelected && incidentLocation) {
+
+      s.latitude =
+
+        incidentLocation.latitude;
+
+
+
+      s.longitude =
+
+        incidentLocation.longitude;
+
+
+
+      s.hazard_radius_km = 2.2;
+
+      s.facility_display_radius_km = 3.0;
+
+      s.facility_display_limit = 20;
+
+      s.shelter_candidates = 6;
+
+    }
+
+
+
+    return s;
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     RESET
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  function reset() {
+
+
+
+    ids.forEach(id => {
+
+      $(id).value = DEF[id];
+
+    });
+
+
+
+    blocked.clear();
+
+
+
+    hazardLayer.clearLayers();
+
+
+
+    if (hazardCircle) {
+
+      map.removeLayer(hazardCircle);
+
+    }
+
+
+
+    if (hazardMarker) {
+
+      map.removeLayer(hazardMarker);
+
+    }
+
+
+
+    hazardCircle = null;
+
+    hazardMarker = null;
+
+
+
+    incidentLocation = null;
+
+    locationSelected = false;
+
+
+
+    hazardMode = false;
+
+
+
+    $('hazardBtn').textContent =
+
+      '🚨 Drop Hazard Zone on Map';
+
+
+
+    $('hazardBtn').style.background =
+
+      '#dc2626';
+
+
+
+    syncRoads();
+
+
+
+    base = null;
+
+
+
+    $('bottleneckSection').style.display =
+
+      'none';
+
+
+
+    setStatus(
+
+      'Seed reset. Select an incident location on the map for geographic recovery planning.'
+
+    );
+
+
+
+    run();
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     BASELINE
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  function lockBase() {
+
+
+
+
+
+
+
+    if (!last) {
+
+
+
+
+
+
+
+      setStatus(
+
+
+
+        'Generate a plan before locking the baseline.'
+
+
+
+      );
+
+
+
+
+
+
+
+      return;
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /*
+
+
+
+      Deep copy prevents later scenario
+
+
+
+      changes from modifying the baseline.
+
+
+
+    */
+
+
+
+
+
+
+
+    base = JSON.parse(
+
+
+
+      JSON.stringify(last)
+
+
+
+    );
+
+
+
+
+
+
+
+
+
+
+
+    setStatus(
+
+
+
+      'Current recovery plan locked as baseline.'
+
+
+
+    );
+
+
+
+
+
+
+
+
+
+
+
+    run();
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     ROAD MANAGEMENT
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  function syncRoads() {
+
+
+
+
+
+
+
+    document
+
+
+
+      .querySelectorAll('.roads input')
+
+
+
+      .forEach(c => {
+
+
+
+
+
+
+
+        c.checked =
+
+
+
+          blocked.has(c.value);
+
+
+
+
+
+
+
+      });
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  function toggle(rid) {
+
+
+
+
+
+
+
+    if (blocked.has(rid)) {
+
+
+
+
+
+
+
+      blocked.delete(rid);
+
+
+
+
+
+
+
+    } else {
+
+
+
+
+
+
+
+      blocked.add(rid);
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    syncRoads();
+
+
+
+
+
+
+
+    run();
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     BASELINE DELTA
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  function delta(
+
+
+
+    key,
+
+
+
+    current,
+
+
+
+    lowerBetter
+
+
+
+  ) {
+
+
+
+
+
+
+
+    if (
+
+
+
+      !base ||
+
+
+
+      base[key] === undefined ||
+
+
+
+      current === undefined
+
+
+
+    ) {
+
+
+
+
+
+
+
+      return '';
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    const difference =
+
+
+
+      Number(current) -
+
+
+
+      Number(base[key]);
+
+
+
+
+
+
+
+
+
+
+
+    if (!difference) {
+
+
+
+
+
+
+
+      return '';
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    const bad =
+
+
+
+      lowerBetter
+
+
+
+        ? difference > 0
+
+
+
+        : difference < 0;
+
+
+
+
+
+
+
+
+
+
+
+    return `
+
+
+
+      <span class="d ${bad ? 'up' : 'dn'}">
+
+
+
+        ${difference > 0 ? '▲' : '▼'}
+
+
+
+        ${Math.abs(difference).toLocaleString()}
+
+
+
+        vs baseline
+
+
+
+      </span>
+
+
+
+    `;
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     KPI CARD
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  function kpi(
+
+
+
+    title,
+
+
+
+    value,
+
+
+
+    comparison = ''
+
+
+
+  ) {
+
+
+
+
+
+
+
+    return `
+
+
+
+      <div class="k">
+
+
+
+
+
+
+
+        <small>
+
+
+
+          ${title}
+
+
+
+        </small>
+
+
+
+
+
+
+
+        <div>
+
+
+
+          ${value}
+
+
+
+        </div>
+
+
+
+
+
+
+
+        ${comparison}
+
+
+
+
+
+
+
+      </div>
+
+
+
+    `;
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     FEATURE 1
+
+
+
+     LIVE WEATHER
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  async function fetchLiveWeather() {
+
+
+
+
+
+
+
+    const btn =
+
+
+
+      $('weatherBtn');
+
+
+
+
+
+
+
+
+
+
+
+    btn.textContent =
+
+
+
+      '⏳ Fetching Open-Meteo...';
+
+
+
+
+
+
+
+
+
+
+
+    btn.disabled = true;
+
+
+
+
+
+
+
+
+
+
+
+    setStatus(
+
+
+
+      'Fetching live weather...'
+
+
+
+    );
+
+
+
+
+
+
+
+
+
+
+
+    try {
+
+
+
+
+
+
+
+      const response =
+
+
+
+        await fetch(
+
+
+
+          '/api/live-weather?lat=12.9716&lon=77.5946'
+
+
+
+        );
+
+
+
+
+
+
+
+
+
+
+
+      if (!response.ok) {
+
+
+
+
+
+
+
+        throw new Error(
+
+
+
+          'Weather request failed'
+
+
+
+        );
+
+
+
+
+
+
+
+      }
+
+
+
+
+
+
+
+
+
+
+
+      const data =
+
+
+
+        await response.json();
+
+
+
+
+
+
+
+
+
+
+
+      if (
+
+
+
+        data.status === 'success'
+
+
+
+      ) {
+
+
+
+
+
+
+
+        const suggested =
+
+
+
+          data.suggested_seed || {};
+
+
+
+
+
+
+
+
+
+
+
+        if (
+
+
+
+          suggested.disaster !== undefined
+
+
+
+        ) {
+
+
+
+
+
+
+
+          $('disaster').value =
+
+
+
+            suggested.disaster;
+
+
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+        if (
+
+
+
+          suggested.damage !== undefined
+
+
+
+        ) {
+
+
+
+
+
+
+
+          $('damage').value =
+
+
+
+            suggested.damage;
+
+
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+        if (
+
+
+
+          suggested.population !== undefined
+
+
+
+        ) {
+
+
+
+
+
+
+
+          $('population').value =
+
+
+
+            suggested.population;
+
+
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+        const rain =
+
+
+
+          data.weather?.rain_mm ??
+
+
+
+          'N/A';
+
+
+
+
+
+
+
+
+
+
+
+        const wind =
+
+
+
+          data.weather?.wind_kmh ??
+
+
+
+          'N/A';
+
+
+
+
+
+
+
+
+
+
+
+        alert(
+
+
+
+          `✅ Live Weather Applied\n\n` +
+
+
+
+          `Rain: ${rain} mm\n` +
+
+
+
+          `Wind: ${wind} km/h\n` +
+
+
+
+          `Suggested damage: ${
+
+
+
+            suggested.damage ?? 'N/A'
+
+
+
+          }%`
+
+
+
+        );
+
+
+
+
+
+
+
+
+
+
+
+        setStatus(
+
+
+
+          'Live weather seed applied.'
+
+
+
+        );
+
+
+
+
+
+
+
+
+
+
+
+        run();
+
+
+
+
+
+
+
+      } else {
+
+
+
+
+
+
+
+        alert(
+
+
+
+          data.message ||
+
+
+
+          'Weather data unavailable.'
+
+
+
+        );
+
+
+
+
+
+
+
+        setStatus(
+
+
+
+          'Weather data unavailable.'
+
+
+
+        );
+
+
+
+
+
+
+
+      }
+
+
+
+
+
+
+
+    } catch (error) {
+
+
+
+
+
+
+
+      console.error(error);
+
+
+
+
+
+
+
+
+
+
+
+      alert(
+
+
+
+        'Could not reach the weather API.'
+
+
+
+      );
+
+
+
+
+
+
+
+
+
+
+
+      setStatus(
+
+
+
+        'Weather API unavailable.'
+
+
+
+      );
+
+
+
+
+
+
+
+    } finally {
+
+
+
+
+
+
+
+      btn.textContent =
+
+
+
+        '⚡ Auto-Seed via Live Weather';
+
+
+
+
+
+
+
+      btn.disabled = false;
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+     FEATURE 2
+
+     HAZARD LOCATION
+
+  ===================================================== */
+
+
+
+  function toggleHazardMode() {
+
+
+
+    hazardMode = !hazardMode;
+
+
+
+    const btn = $('hazardBtn');
+
+
+
+    if (hazardMode) {
+
+      btn.textContent = '🎯 Click map to place hazard';
+
+      btn.style.background = '#f59e0b';
+
+
+
+      setStatus(
+
+        'Hazard mode active. Click on the map to select the incident location.'
+
+      );
+
+
+
+    } else {
+
+      btn.textContent = '🚨 Drop Hazard Zone on Map';
+
+      btn.style.background = '#dc2626';
+
+
+
+      setStatus(
+
+        locationSelected
+
+          ? 'Incident location retained.'
+
+          : 'Hazard mode disabled.'
+
+      );
+
+    }
+
+  }
+
+
+
+  map.on('click', async e => {
+
+
+
+    if (!hazardMode) {
+
+      return;
+
+    }
+
+
+
+    incidentLocation = {
+
+      latitude: e.latlng.lat,
+
+      longitude: e.latlng.lng
+
+    };
+
+
+
+    locationSelected = true;
+
+    hazardMode = false;
+
+
+
+    $('hazardBtn').textContent =
+
+      '🚨 Drop Hazard Zone on Map';
+
+
+
+    $('hazardBtn').style.background =
+
+      '#dc2626';
+
+
+
+    hazardLayer.clearLayers();
+
+
+
+    if (hazardCircle) {
+
+      map.removeLayer(hazardCircle);
+
+    }
+
+
+
+    if (hazardMarker) {
+
+      map.removeLayer(hazardMarker);
+
+    }
+
+
+
+    const radius = 2200;
+
+
+
+    hazardCircle =
+
+      L.circle(
+
+        e.latlng,
+
+        {
+
+          radius: radius,
+
+          color: '#ef4444',
+
+          fillColor: '#ef4444',
+
+          fillOpacity: 0.25,
+
+          weight: 2
+
+        }
+
+      ).addTo(hazardLayer);
+
+
+
+    hazardMarker =
+
+      L.marker(e.latlng)
+
+        .bindPopup(
+
+          `
+
+            <strong>Selected Incident Location</strong><br>
+
+            Latitude: ${e.latlng.lat.toFixed(6)}<br>
+
+            Longitude: ${e.latlng.lng.toFixed(6)}<br>
+
+            Hazard radius: 2.2 km
+
+          `
+
+        )
+
+        .addTo(hazardLayer);
+
+
+
+    setStatus(
+
+      `Incident selected at ${
+
+        e.latlng.lat.toFixed(5)
+
+      }, ${
+
+        e.latlng.lng.toFixed(5)
+
+      }. Calculating nearby population and shelters...`
+
+    );
+
+
+
+    /*
+
+     * Backend automatic road detection uses the complete
+
+     * real Bengaluru GraphML network. We do not locally mark
+
+     * every map edge inside the circle as blocked.
+
+     */
+
+    await run();
+
+  });
+
+
+
+  /* =====================================================
+
+
+
+     FEATURE 3
+
+
+
+     ROAD BOTTLENECK ANALYSIS
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  async function runBottlenecks() {
+
+
+
+
+
+
+
+    const section =
+
+
+
+      $('bottleneckSection');
+
+
+
+
+
+
+
+
+
+
+
+    const box =
+
+
+
+      $('bottleneckResults');
+
+
+
+
+
+
+
+
+
+
+
+    section.style.display =
+
+
+
+      'block';
+
+
+
+
+
+
+
+
+
+
+
+    box.innerHTML =
+
+
+
+      'Analyzing network vulnerabilities...';
+
+
+
+
+
+
+
+
+
+
+
+    try {
+
+
+
+
+
+
+
+      const response =
+
+
+
+        await fetch(
+
+
+
+          '/api/bottlenecks',
+
+
+
+          {
+
+
+
+            method: 'POST',
+
+
+
+
+
+
+
+            headers: {
+
+
+
+              'Content-Type':
+
+
+
+                'application/json'
+
+
+
+            },
+
+
+
+
+
+
+
+            body:
+
+
+
+              JSON.stringify(
+
+
+
+                seed()
+
+
+
+              )
+
+
+
+          }
+
+
+
+        );
+
+
+
+
+
+
+
+
+
+
+
+      if (!response.ok) {
+
+
+
+
+
+
+
+        throw new Error(
+
+
+
+          'Bottleneck API failed'
+
+
+
+        );
+
+
+
+
+
+
+
+      }
+
+
+
+
+
+
+
+
+
+
+
+      const data =
+
+
+
+        await response.json();
+
+
+
+
+
+
+
+
+
+
+
+      const roads =
+
+
+
+        data.critical_roads || [];
+
+
+
+
+
+
+
+
+
+
+
+      if (!roads.length) {
+
+
+
+
+
+
+
+        box.innerHTML =
+
+
+
+          'No critical bottlenecks detected.';
+
+
+
+
+
+
+
+        return;
+
+
+
+
+
+
+
+      }
+
+
+
+
+
+
+
+
+
+
+
+      box.innerHTML =
+
+
+
+        roads.map(
+
+
+
+          c => `
+
+
+
+
+
+
+
+            <div
+
+
+
+              style="
+
+
+
+                margin-bottom:6px;
+
+
+
+                padding-bottom:6px;
+
+
+
+                border-bottom:1px solid #334155;
+
+
+
+              "
+
+
+
+            >
+
+
+
+
+
+
+
+              <span class="critical-tag">
+
+
+
+                ${c.road_id}
+
+
+
+              </span>
+
+
+
+
+
+
+
+              <b>
+
+
+
+                ${c.name || 'Real road segment'}
+
+
+
+              </b>
+
+
+
+
+
+
+
+              <br>
+
+
+
+
+
+
+
+              <small
+
+
+
+                style="color:#f87171;"
+
+
+
+              >
+
+
+
+                If severed:
+
+
+
+                Risk +${c.risk_increase ?? 0} pts |
+
+
+
+                ${c.sheltered_loss}
+
+
+
+                more people affected
+
+
+
+              </small>
+
+
+
+
+
+
+
+            </div>
+`
+
+
+
+        ).join('');
+
+
+
+
+
+
+
+
+
+
+
+    } catch (error) {
+
+
+
+
+
+
+
+      console.error(error);
+
+
+
+
+
+
+
+
+
+
+
+      box.innerHTML =
+
+
+
+        `
+
+
+
+          <span style="color:#f87171;">
+
+
+
+            Bottleneck analysis unavailable.
+
+
+
+          </span>
+
+
+
+        `;
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     DRAW MAP
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  function draw(plan) {
+
+
+
+    if (!G) {
+
+      return;
+
+    }
+
+
+
+    layer.clearLayers();
+
+
+
+    /*
+
+     * REAL ROAD NETWORK
+
+     */
+
+    G.edges.forEach(edge => {
+
+
+
+      const a = G.nodes[edge.a];
+
+      const b = G.nodes[edge.b];
+
+
+
+      if (!a || !b) {
+
+        return;
+
+      }
+
+
+
+      const detection =
+
+        plan?.road_detection || {};
+
+
+
+      const roadDetails =
+
+        detection.road_details || [];
+
+
+
+      const detail =
+
+        roadDetails.find(
+
+          item => item.id === edge.id
+
+        );
+
+
+
+      const status =
+
+        detail?.status ||
+
+        (
+
+          blocked.has(edge.id)
+
+            ? 'blocked'
+
+            : 'safe'
+
+        );
+
+
+
+      L.polyline(
+
+        [
+
+          [a.lat, a.lng],
+
+          [b.lat, b.lng]
+
+        ],
+
+        {
+
+          color: window.__seedRescueGetRoadColor(status),
+
+          weight:
+
+            status === 'blocked'
+
+              ? 6
+
+              : status === 'orange'
+
+                ? 5
+
+                : status === 'yellow'
+
+                  ? 4
+
+                  : 3,
+
+          dashArray:
+
+            status === 'blocked'
+
+              ? '6 8'
+
+              : null,
+
+          opacity: 0.82
+
+        }
+
+      )
+
+      .bindTooltip(
+
+        `${edge.id} (${window.__seedRescueFormatStatus(status)})`
+
+      )
+
+      .on(
+
+        'click',
+
+        () => toggle(edge.id)
+
+      )
+
+      .addTo(layer);
+
+    });
+
+
+
+    /*
+
+     * EVACUATION ROUTES
+
+     */
+
+    (plan?.assignments || []).forEach(
+
+      assignment => {
+
+
+
+        if (
+
+          !assignment.path ||
+
+          assignment.path.length < 2
+
+        ) {
+
+          return;
+
+        }
+
+
+
+        const coordinates =
+
+          assignment.path
+
+            .map(
+
+              nodeId => G.nodes[nodeId]
+
+            )
+
+            .filter(Boolean)
+
+            .map(
+
+              node => [
+
+                node.lat,
+
+                node.lng
+
+              ]
+
+            );
+
+
+
+        if (coordinates.length < 2) {
+
+          return;
+
+        }
+
+
+
+        L.polyline(
+
+          coordinates,
+
+          {
+
+            color: '#22c55e',
+
+            weight: 6,
+
+            opacity: 0.88
+
+          }
+
+        )
+
+        .bindTooltip(
+
+          `${
+
+            Number(
+
+              assignment.people || 0
+
+            ).toLocaleString()
+
+          } people → ${
+
+            assignment.shelter_name ||
+
+            assignment.shelter ||
+
+            'Shelter'
+
+          }`
+
+        )
+
+        .addTo(layer);
+
+      }
+
+    );
+
+
+
+    /*
+
+     * SUPPLY ROUTES
+
+     */
+
+    (plan?.supply_routes || []).forEach(
+
+      route => {
+
+
+
+        if (
+
+          !route.path ||
+
+          route.path.length < 2
+
+        ) {
+
+          return;
+
+        }
+
+
+
+        const coordinates =
+
+          route.path
+
+            .map(
+
+              nodeId => G.nodes[nodeId]
+
+            )
+
+            .filter(Boolean)
+
+            .map(
+
+              node => [
+
+                node.lat,
+
+                node.lng
+
+              ]
+
+            );
+
+
+
+        if (coordinates.length < 2) {
+
+          return;
+
+        }
+
+
+
+        L.polyline(
+
+          coordinates,
+
+          {
+
+            color: '#38bdf8',
+
+            weight: 3,
+
+            dashArray: '4 8',
+
+            opacity: 0.9
+
+          }
+
+        )
+
+        .bindTooltip(
+
+          `Supply route · ${
+
+            route.zone_name ||
+
+            route.zone ||
+
+            ''
+
+          }`
+
+        )
+
+        .addTo(layer);
+
+      }
+
+    );
+
+
+
+    /*
+
+     * AFFECTED REAL POPULATION CELLS
+
+     */
+
+    if (plan?.geographic_plan_ready) {
+
+
+
+      (plan.zones || []).forEach(
+
+        zone => {
+
+
+
+          const need =
+
+            Number(zone.need || 0);
+
+
+
+          const unsheltered =
+
+            Number(
+
+              zone.unsheltered || 0
+
+            );
+
+
+
+          const ratio =
+
+            unsheltered /
+
+            Math.max(1, need);
+
+
+
+          const color =
+
+            ratio > 0.5
+
+              ? '#ef4444'
+
+              : ratio > 0
+
+                ? '#f59e0b'
+
+                : '#22c55e';
+
+
+
+          const marker =
+
+            L.circleMarker(
+
+              [
+
+                zone.latitude,
+
+                zone.longitude
+
+              ],
+
+              {
+
+                radius: 8,
+
+                fillColor: color,
+
+                color: '#ffffff',
+
+                weight: 2,
+
+                fillOpacity: 0.9
+
+              }
+
+            )
+
+            .bindPopup(
+
+              `
+
+                <strong>${window.__seedRescueEscapeHtml(zone.name)}</strong><br>
+
+                Population:
+
+                ${Number(
+
+                  zone.population || 0
+
+                ).toLocaleString()}<br>
+
+                Shelter need:
+
+                ${need.toLocaleString()}<br>
+
+                Sheltered:
+
+                ${Number(
+
+                  zone.sheltered || 0
+
+                ).toLocaleString()}<br>
+
+                Unsheltered:
+
+                ${unsheltered.toLocaleString()}<br>
+
+                Hazard zone:
+
+                ${window.__seedRescueEscapeHtml(
+
+                  zone.hazard_zone || '—'
+
+                )}
+
+              `
+
+            )
+
+            .addTo(layer);
+
+
+
+        }
+
+      );
+
+    }
+
+
+
+    /*
+
+     * ONLY INCIDENT-RELEVANT REAL FACILITIES
+
+     */
+
+    if (
+
+      plan?.geographic_plan_ready &&
+
+      Array.isArray(
+
+        plan.relevant_facilities
+
+      )
+
+    ) {
+
+
+
+      plan.relevant_facilities.forEach(
+
+        facility => {
+
+
+
+          if (
+
+            facility.lat === undefined ||
+
+            facility.lng === undefined
+
+          ) {
+
+            return;
+
+          }
+
+
+
+          const type =
+
+            facility.type ||
+
+            facility.facility_type ||
+
+            'facility';
+
+
+
+          const icon =
+
+            type === 'hospital'
+
+              ? '🏥'
+
+              : type === 'temporary_shelter'
+
+                ? '🏫'
+
+                : '🏠';
+
+
+
+          const marker =
+
+            L.marker(
+
+              [
+
+                facility.lat,
+
+                facility.lng
+
+              ],
+
+              {
+
+                icon:
+
+                  L.divIcon({
+
+                    html:
+
+                      `<div style="font-size:24px;">${icon}</div>`,
+
+                    className: '',
+
+                    iconSize: [28, 28]
+
+                  })
+
+              }
+
+            );
+
+
+
+          if (type === 'hospital') {
+
+
+
+            marker.bindPopup(
+
+              `
+
+                <strong>
+
+                  ${window.__seedRescueEscapeHtml(
+
+                    facility.name ||
+
+                    'Unnamed hospital'
+
+                  )}
+
+                </strong><br>
+
+                Type: Hospital<br>
+
+                Distance from incident:
+
+                ${Number(
+
+                  facility.distance_from_hazard_km || 0
+
+                ).toFixed(2)} km
+
+              `
+
+            );
+
+
+
+          } else {
+
+
+
+            marker.bindPopup(
+
+              `
+
+                <strong>
+
+                  ${window.__seedRescueEscapeHtml(
+
+                    facility.name ||
+
+                    'Unnamed facility'
+
+                  )}
+
+                </strong><br>
+
+
+
+                Type:
+
+                ${window.__seedRescueEscapeHtml(
+
+                  facility.facility_type ||
+
+                  type
+
+                )}<br>
+
+
+
+                Status:
+
+                ${window.__seedRescueEscapeHtml(
+
+                  facility.shelter_status ||
+
+                  'Not specified'
+
+                )}<br>
+
+
+
+                Capacity:
+
+                ${Number(
+
+                  facility.capacity || 0
+
+                ).toLocaleString()}
+
+                ${
+
+                  facility.capacity_source
+
+                    ? `(${window.__seedRescueEscapeHtml(
+
+                        facility.capacity_source
+
+                      )})`
+
+                    : ''
+
+                }<br>
+
+
+
+                Distance from incident:
+
+                ${Number(
+
+                  facility.distance_from_hazard_km || 0
+
+                ).toFixed(2)} km<br>
+
+
+
+                Source:
+
+                ${window.__seedRescueEscapeHtml(
+
+                  facility.source_dataset ||
+
+                  'dataset'
+
+                )}
+
+              `
+
+            );
+
+          }
+
+
+
+          marker.addTo(layer);
+
+        }
+
+      );
+
+    }
+
+
+
+    if (
+
+      incidentLocation &&
+
+      locationSelected
+
+    ) {
+
+      if (hazardCircle) {
+
+        map.removeLayer(hazardCircle);
+
+      }
+
+
+
+      if (hazardMarker) {
+
+        map.removeLayer(hazardMarker);
+
+      }
+
+
+
+      const point = [
+
+        incidentLocation.latitude,
+
+        incidentLocation.longitude
+
+      ];
+
+
+
+      hazardCircle =
+
+        L.circle(
+
+          point,
+
+          {
+
+            radius: 2200,
+
+            color: '#ef4444',
+
+            fillColor: '#ef4444',
+
+            fillOpacity: 0.25,
+
+            weight: 2
+
+          }
+
+        ).addTo(hazardLayer);
+
+
+
+      hazardMarker =
+
+        L.marker(point)
+
+          .bindPopup(
+
+            `
+
+              <strong>Selected Incident Location</strong><br>
+
+              ${incidentLocation.latitude.toFixed(6)},
+
+              ${incidentLocation.longitude.toFixed(6)}
+
+            `
+
+          )
+
+          .addTo(hazardLayer);
+
+    }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     RENDER RECOVERY PLAN
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  
+  function displayZonePriorities(zonePriorities) {
+    const container = $('zonePriorityList');
+
+    if (!container) return;
+
+    if (!Array.isArray(zonePriorities) || !zonePriorities.length) {
+      container.innerHTML = `
+        <div class="priority-empty">
+          No zone priority data returned. Generate a plan after selecting an incident location.
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = zonePriorities.map(zone => {
+      const level = String(zone.priority_level || 'LOW').toLowerCase();
+      const reasons = Array.isArray(zone.reasons) && zone.reasons.length
+        ? zone.reasons
+        : ['Relatively lower recovery pressure'];
+
+      return `
+        <div class="zone-priority-card ${level}">
+          <div class="priority-top">
+            <span class="priority-rank">
+              #${zone.rank ?? '—'} ${escapeHtml(zone.zone_name || zone.zone_id || 'Zone')}
+            </span>
+            <span class="priority-score">${Number(zone.priority_score ?? 0).toFixed(1)}</span>
+          </div>
+          <span class="priority-level ${level}">${escapeHtml(zone.priority_level || 'LOW')}</span>
+          <div class="priority-metrics">
+            <div>Risk: <b>${Number(zone.risk ?? 0).toFixed(1)}</b></div>
+            <div>Need: <b>${Number(zone.need ?? 0).toLocaleString()}</b></div>
+            <div>Unsheltered: <b>${Number(zone.unsheltered ?? 0).toLocaleString()}</b></div>
+            <div>Reachable: <b>${zone.reachable ? 'Yes' : 'No'}</b></div>
+            <div>Hospital: <b>${zone.hospital_access ? 'Yes' : 'No'}</b></div>
+            <div>Hazard: <b>${escapeHtml(zone.hazard_zone || '—')}</b></div>
+          </div>
+          <div style="margin-top:7px;color:#38bdf8;font-size:11px;font-weight:700;">Why this zone?</div>
+          <ul class="priority-reasons">
+            ${reasons.map(reason => `<li>${escapeHtml(reason)}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+    }).join('');
+  }
+
+function render(plan) {
+
+
+
+    const demand =
+
+      plan.demand || {};
+
+
+
+    const riskBreakdown =
+
+      plan.risk_breakdown || {};
+
+
+
+    const priorities =
+
+      plan.priorities || [];
+
+
+
+    const assignments =
+
+      plan.assignments || [];
+
+
+
+    const zones =
+
+      plan.zones || [];
+
+    displayZonePriorities(plan.zone_priorities || []);
+
+
+
+    const shortage =
+
+      plan.shortage || {};
+
+
+
+    const briefing =
+
+      plan.briefing || [];
+
+
+
+    $('kpis').innerHTML =
+
+
+
+      kpi(
+
+        'Risk Score',
+
+        `
+
+          ${plan.risk ?? '--'}
+
+          <small>
+
+            (${plan.risk_level ?? 'N/A'})
+
+          </small>
+
+        `,
+
+        delta(
+
+          'risk',
+
+          plan.risk,
+
+          true
+
+        )
+
+      )
+
+
+
+      +
+
+
+
+      kpi(
+
+        'Recovery Score',
+
+        plan.recovery_score ?? '--',
+
+        delta(
+
+          'recovery_score',
+
+          plan.recovery_score,
+
+          false
+
+        )
+
+      )
+
+
+
+      +
+
+
+
+      kpi(
+
+        'Displaced',
+
+        Number(
+
+          plan.displaced || 0
+
+        ).toLocaleString(),
+
+        delta(
+
+          'displaced',
+
+          plan.displaced,
+
+          true
+
+        )
+
+      )
+
+
+
+      +
+
+
+
+      kpi(
+
+        'Medical Demand',
+
+        Number(
+
+          demand.medical || 0
+
+        ).toLocaleString(),
+
+        delta(
+
+          'medical_d',
+
+          demand.medical,
+
+          true
+
+        )
+
+      )
+
+
+
+      +
+
+
+
+      kpi(
+
+        'Safe Roads',
+
+        plan.accessible_roads ?? '--',
+
+        delta(
+
+          'accessible_roads',
+
+          plan.accessible_roads,
+
+          false
+
+        )
+
+      )
+
+
+
+      +
+
+
+
+      kpi(
+
+        'Sheltered',
+
+        Number(
+
+          plan.sheltered || 0
+
+        ).toLocaleString(),
+
+        delta(
+
+          'sheltered',
+
+          plan.sheltered,
+
+          false
+
+        )
+
+      )
+
+
+
+      +
+
+
+
+      (
+
+        plan.ml
+
+          ?
+
+            kpi(
+
+              '🤖 AI ML Risk',
+
+              `
+
+                ${plan.ml.risk ?? '--'}
+
+                <small>
+
+                  (${plan.ml.risk_level ?? 'N/A'})
+
+                </small>
+
+              `
+
+            )
+
+            +
+
+            kpi(
+
+              '🤖 AI Displaced',
+
+              Number(
+
+                Math.round(
+
+                  plan.ml.displaced || 0
+
+                )
+
+              ).toLocaleString()
+
+            )
+
+          :
+
+            ''
+
+      );
+
+
+
+    /*
+
+     * INCIDENT STATUS / DIRECTIVES
+
+     */
+
+    const locationNotice =
+
+      plan.geographic_plan_ready
+
+        ?
+
+          `
+
+            <div
+
+              class="directive"
+
+              style="border-left-color:#22c55e;"
+
+            >
+
+              ✅ Geographic recovery plan calculated
+
+              for the selected incident location.
+
+            </div>
+
+          `
+
+        :
+
+          `
+
+            <div
+
+              class="directive"
+
+              style="
+
+                border-left-color:#f59e0b;
+
+                color:#fde68a;
+
+              "
+
+            >
+
+              📍 Scenario intelligence is available,
+
+              but geographic shelter allocation is waiting
+
+              for an incident location.
+
+            </div>
+
+          `;
+
+
+
+    if (briefing.length) {
+
+
+
+      $('briefing').innerHTML =
+
+        locationNotice +
+
+        briefing
+
+          .map(
+
+            directive =>
+
+              `
+
+                <div class="directive">
+
+                  ${directive}
+
+                </div>
+
+              `
+
+          )
+
+          .join('');
+
+
+
+    } else {
+
+
+
+      $('briefing').innerHTML =
+
+        locationNotice +
+
+        `
+
+          <div class="directive">
+
+            Prioritize the highest-risk zones first.
+
+          </div>
+
+        `;
+
+    }
+
+
+
+    if (priorities.length) {
+
+
+
+      $('prio').innerHTML =
+
+        priorities
+
+          .map(
+
+            priority =>
+
+              `
+
+                <li>
+
+                  <b>
+
+                    ${priority.name}
+
+                  </b>
+
+                  <small>
+
+                    (Gap ${
+
+                      priority.gap ?? 0
+
+                    }%)
+
+                  </small>
+
+                </li>
+
+              `
+
+          )
+
+          .join('');
+
+
+
+    } else {
+
+
+
+      $('prio').innerHTML =
+
+        `
+
+          <li>
+
+            No priority data returned.
+
+          </li>
+
+        `;
+
+    }
+
+
+
+    $('why').innerHTML =
+
+      Object.entries(
+
+        riskBreakdown
+
+      )
+
+      .map(
+
+        ([key, value]) =>
+
+          `
+
+            <div
+
+              style="
+
+                display:flex;
+
+                justify-content:space-between;
+
+                font-size:11px;
+
+                margin-top:3px;
+
+              "
+
+            >
+
+              <span>${window.__seedRescueEscapeHtml(key)}</span>
+
+              <span>+${value}</span>
+
+            </div>
+
+
+
+            <div class="bar">
+
+              <i
+
+                style="
+
+                  width:${Math.min(
+
+                    100,
+
+                    Number(value) * 3.5
+
+                  )}%;
+
+                "
+
+              ></i>
+
+            </div>
+
+          `
+
+      )
+
+      .join('');
+
+
+
+    /*
+
+     * SHELTER ALLOCATION AUDIT
+
+     */
+
+    if (!plan.geographic_plan_ready) {
+
+
+
+      $('alloc').innerHTML =
+
+        `
+
+          <tr>
+
+            <th>Zone</th>
+
+            <th>Real Facility</th>
+
+            <th>People</th>
+
+          </tr>
+
+
+
+          <tr>
+
+            <td colspan="3">
+
+              📍 Select an incident location on the map.
+
+              Allocation will then use nearby real shelters,
+
+              mantapas, townhalls, schools and other facilities
+
+              from the real dataset.
+
+            </td>
+
+          </tr>
+
+        `;
+
+
+
+    } else {
+
+
+
+      const assignmentRows =
+
+        assignments
+
+          .map(
+
+            assignment =>
+
+              `
+
+                <tr>
+
+
+
+                  <td>
+
+                    ${window.__seedRescueEscapeHtml(
+
+                      assignment.zone_name ||
+
+                      assignment.zone ||
+
+                      'Population Cell'
+
+                    )}
+
+                  </td>
+
+
+
+                  <td>
+
+                    <strong>
+
+                      ${window.__seedRescueEscapeHtml(
+
+                        assignment.shelter_name ||
+
+                        assignment.shelter ||
+
+                        'Unnamed facility'
+
+                      )}
+
+                    </strong>
+
+
+
+                    <br>
+
+
+
+                    <small>
+
+                      ${window.__seedRescueEscapeHtml(
+
+                        assignment.facility_type ||
+
+                        ''
+
+                      )}
+
+                      ·
+
+                      ${window.__seedRescueEscapeHtml(
+
+                        assignment.shelter_status ||
+
+                        ''
+
+                      )}
+
+                    </small>
+
+                  </td>
+
+
+
+                  <td>
+
+                    ${Number(
+
+                      assignment.people || 0
+
+                    ).toLocaleString()}
+
+                  </td>
+
+
+
+                </tr>
+
+              `
+
+          )
+
+          .join('');
+
+
+
+      const unshelteredRows =
+
+        zones
+
+          .filter(
+
+            zone =>
+
+              Number(
+
+                zone.unsheltered || 0
+
+              ) > 0
+
+          )
+
+          .map(
+
+            zone =>
+
+              `
+
+                <tr style="color:#f87171;">
+
+                  <td>
+
+                    ${window.__seedRescueEscapeHtml(
+
+                      zone.name
+
+                    )}
+
+                  </td>
+
+
+
+                  <td>
+
+                    UNSHELTERED
+
+                  </td>
+
+
+
+                  <td>
+
+                    ${Number(
+
+                      zone.unsheltered || 0
+
+                    ).toLocaleString()}
+
+                  </td>
+
+                </tr>
+
+              `
+
+          )
+
+          .join('');
+
+
+
+      $('alloc').innerHTML =
+
+        `
+
+          <tr>
+
+            <th>Zone</th>
+
+            <th>Real Facility</th>
+
+            <th>People</th>
+
+          </tr>
+
+
+
+          ${
+
+            assignmentRows ||
+
+            `
+
+              <tr>
+
+                <td colspan="3">
+
+                  No reachable real temporary shelter
+
+                  received an allocation.
+
+                </td>
+
+              </tr>
+
+            `
+
+          }
+
+
+
+          ${unshelteredRows}
+
+        `;
+
+    }
+
+
+
+    const shortageEntries =
+
+      Object.entries(
+
+        shortage
+
+      );
+
+
+
+    if (!shortageEntries.length) {
+
+
+
+      $('short').innerHTML =
+
+        'No shortage data returned.';
+
+
+
+    } else {
+
+
+
+      $('short').innerHTML =
+
+        shortageEntries
+
+          .map(
+
+            ([key, value]) =>
+
+              `
+
+                <div
+
+                  style="
+
+                    font-size:12px;
+
+                    margin:3px 0;
+
+                  "
+
+                >
+
+
+
+                  ${window.__seedRescueEscapeHtml(
+
+                    key.toUpperCase()
+
+                  )}:
+
+
+
+                  <b
+
+                    style="
+
+                      color:${
+
+                        value > 0
+
+                          ? '#f87171'
+
+                          : '#4ade80'
+
+                      };
+
+                    "
+
+                  >
+
+                    ${
+
+                      value > 0
+
+                        ? 'Deficit ' +
+
+                          Number(
+
+                            value
+
+                          ).toLocaleString()
+
+                        : 'Covered'
+
+                    }
+
+                  </b>
+
+
+
+                </div>
+
+              `
+
+          )
+
+          .join('');
+
+    }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     RUN RECOVERY PLAN
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  async function run() {
+
+
+
+    $('v_population').textContent =
+
+      Number(
+
+        $('population').value
+
+      ).toLocaleString();
+
+
+
+    $('v_damage').textContent =
+
+      $('damage').value + '%';
+
+
+
+    setStatus(
+
+      locationSelected && incidentLocation
+
+        ? `Recalculating recovery plan for ${
+
+            incidentLocation.latitude.toFixed(5)
+
+          }, ${
+
+            incidentLocation.longitude.toFixed(5)
+
+          }...`
+
+        : 'Updating scenario intelligence. Select an incident location for geographic recovery planning.'
+
+    );
+
+
+
+    try {
+
+
+
+      const response =
+
+        await fetch(
+
+          '/api/plan',
+
+          {
+
+            method: 'POST',
+
+
+
+            headers: {
+
+              'Content-Type':
+
+                'application/json'
+
+            },
+
+
+
+            body:
+
+              JSON.stringify(
+
+                seed()
+
+              )
+
+          }
+
+        );
+
+
+
+      if (!response.ok) {
+
+        throw new Error(
+
+          `Plan API returned ${
+
+            response.status
+
+          }`
+
+        );
+
+      }
+
+
+
+      const plan =
+
+        await response.json();
+
+
+
+      if (plan.error) {
+
+        throw new Error(
+
+          plan.error
+
+        );
+
+      }
+
+
+
+      plan.medical_d =
+
+        plan.demand?.medical || 0;
+
+
+
+      last = plan;
+
+
+
+      render(plan);
+
+
+
+      draw(plan);
+
+
+
+    } catch (error) {
+
+
+
+      console.error(error);
+
+
+
+      $('briefing').innerHTML =
+
+        `
+
+          <div
+
+            style="
+
+              color:#f87171;
+
+            "
+
+          >
+
+            Unable to generate recovery plan.
+
+            <br><br>
+
+            ${window.__seedRescueEscapeHtml(
+
+              error.message ||
+
+              'Backend/API error.'
+
+            )}
+
+          </div>
+
+        `;
+
+
+
+      setStatus(
+
+        'Backend/API error. Check terminal.'
+
+      );
+
+    }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /* =====================================================
+
+
+
+     INITIALIZE GRAPH
+
+
+
+  ===================================================== */
+
+
+
+
+
+
+
+  (async () => {
+
+
+
+
+
+
+
+    try {
+
+
+
+
+
+
+
+      const response =
+
+
+
+        await fetch(
+
+
+
+          '/api/graph'
+
+
+
+        );
+
+
+
+
+
+
+
+
+
+
+
+      if (!response.ok) {
+
+
+
+
+
+
+
+        throw new Error(
+
+
+
+          'Graph API failed'
+
+
+
+        );
+
+
+
+
+
+
+
+      }
+
+
+
+
+
+
+
+
+
+
+
+      G =
+
+
+
+        await response.json();
+
+
+
+
+
+
+
+
+
+
+
+      /*
+
+
+
+        Generate blocked-road
+
+
+
+        controls.
+
+
+
+      */
+
+
+
+
+
+
+
+      $('roads').innerHTML =
+
+
+
+        (G.edges || [])
+
+
+
+          .map(
+
+
+
+            edge =>
+
+
+
+              `
+
+
+
+                <label>
+
+
+
+
+
+
+
+                  <input
+
+
+
+                    type="checkbox"
+
+
+
+                    value="${edge.id}"
+
+
+
+                    onchange="
+
+
+
+                      toggle('${edge.id}')
+
+
+
+                    "
+
+
+
+                  >
+
+
+
+
+
+
+
+                  ${edge.id}
+
+
+
+
+
+
+
+                </label>
+
+
+
+              `
+
+
+
+          )
+
+
+
+          .join('');
+
+
+
+
+
+
+
+
+
+
+
+      /*
+
+
+
+        Automatically recalculate
+
+
+
+        when seed changes.
+
+
+
+      */
+
+
+
+
+
+
+
+      ids.forEach(
+
+
+
+        id => {
+
+
+
+
+
+
+
+          $(id).addEventListener(
+
+
+
+            'input',
+
+
+
+            () => {
+
+
+
+
+
+
+
+              clearTimeout(
+
+
+
+                timer
+
+
+
+              );
+
+
+
+
+
+
+
+
+
+
+
+              timer =
+
+
+
+                setTimeout(
+
+
+
+                  run,
+
+
+
+                  150
+
+
+
+                );
+
+
+
+
+
+
+
+            }
+
+
+
+          );
+
+
+
+
+
+
+
+
+
+
+
+          $(id).addEventListener(
+
+
+
+            'change',
+
+
+
+            () => {
+
+
+
+
+
+
+
+              clearTimeout(
+
+
+
+                timer
+
+
+
+              );
+
+
+
+
+
+
+
+
+
+
+
+              timer =
+
+
+
+                setTimeout(
+
+
+
+                  run,
+
+
+
+                  50
+
+
+
+                );
+
+
+
+
+
+
+
+            }
+
+
+
+          );
+
+
+
+
+
+
+
+        }
+
+
+
+      );
+
+
+
+
+
+
+
+
+
+
+
+      run();
+
+
+
+
+
+
+
+
+
+
+
+    } catch (error) {
+
+
+
+
+
+
+
+      console.error(error);
+
+
+
+
+
+
+
+
+
+
+
+      $('briefing').innerHTML =
+
+
+
+        `
+
+
+
+          <div
+
+
+
+            style="
+
+
+
+              color:#f87171;
+
+
+
+            "
+
+
+
+          >
+
+
+
+            Could not load
+
+
+
+            disaster network.
+
+
+
+
+
+
+
+            <br><br>
+
+
+
+
+
+
+
+            Make sure the Flask
+
+
+
+            server is running.
+
+
+
+          </div>
+
+
+
+        `;
+
+
+
+
+
+
+
+      setStatus(
+
+
+
+        'Could not load /api/graph.'
+
+
+
+      );
+
+
+
+
+
+
+
+    }
+
+
+  })();
+
+
+</script>
+
+
+</body>
+
+</html>

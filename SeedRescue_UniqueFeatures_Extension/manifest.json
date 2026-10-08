@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "SeedRescue Unique Features",
+  "version": "1.0.0",
+  "description": "Non-invasive TATTVA decision lens and resilience intelligence overlay for SeedRescue.",
+  "content_scripts": [
+    {
+      "matches": [
+        "http://127.0.0.1:5000/*",
+        "http://localhost:5000/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "style.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": []
+}

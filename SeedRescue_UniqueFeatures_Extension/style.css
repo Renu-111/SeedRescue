@@ -1,0 +1,725 @@
+/* ============================================================
+   SEEDRESCUE+
+   NON-INVASIVE UI
+   ============================================================ */
+
+.srx {
+  position: fixed;
+  top: 0;
+  right: -470px;
+
+  width: 450px;
+  height: 100vh;
+
+  z-index: 2147483646;
+
+  background: #0b1220;
+  color: #e8eef9;
+
+  border-left: 1px solid #2b3952;
+
+  box-shadow:
+    -14px 0 35px rgba(0, 0, 0, .42);
+
+  font-family:
+    Inter,
+    Segoe UI,
+    Arial,
+    sans-serif;
+
+  transition:
+    right .24s ease;
+
+  overflow-y: auto;
+
+  box-sizing: border-box;
+}
+
+
+.srx.srx-open {
+  right: 0;
+}
+
+
+.srx * {
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.srx-bar {
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 2;
+
+  padding: 14px 16px;
+
+  background: #111b2e;
+
+  border-bottom:
+    1px solid #26344d;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+
+.srx-brand {
+
+  color: #4df06f;
+
+  font-size: 18px;
+
+  font-weight: 800;
+}
+
+
+.srx-sub {
+
+  color: #91a2bc;
+
+  font-size: 12px;
+
+  flex: 1;
+}
+
+
+.srx-close {
+
+  border: 0;
+
+  background: #26334b;
+
+  color: #fff;
+
+  width: 30px;
+
+  height: 30px;
+
+  border-radius: 8px;
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+
+/* ============================================================
+   CONTENT
+   ============================================================ */
+
+.srx-content {
+  padding: 14px;
+}
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.srx-hero {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  align-items: center;
+
+  padding: 16px;
+
+  border:
+    1px solid #293953;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #111d31,
+      #0d1728
+    );
+
+  margin-bottom: 12px;
+}
+
+
+.srx-eyebrow,
+.srx-title {
+
+  font-size: 10px;
+
+  letter-spacing: 1.2px;
+
+  font-weight: 800;
+
+  color: #69f27e;
+}
+
+
+.srx h2 {
+
+  margin: 5px 0;
+
+  font-size: 20px;
+}
+
+
+.srx p {
+
+  margin: 5px 0;
+
+  color: #91a2bc;
+
+  font-size: 11px;
+
+  line-height: 1.45;
+}
+
+
+.srx-score {
+
+  text-align: center;
+
+  min-width: 86px;
+}
+
+
+.srx-score span {
+
+  display: block;
+
+  font-size: 9px;
+
+  color: #8ea0ba;
+}
+
+
+.srx-score strong {
+
+  font-size: 38px;
+
+  line-height: 1;
+
+  color: #4df06f;
+}
+
+
+.srx-score small {
+
+  color: #8ea0ba;
+}
+
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+
+.srx-card {
+
+  background: #111b2e;
+
+  border:
+    1px solid #293953;
+
+  border-radius: 14px;
+
+  padding: 14px;
+
+  margin-bottom: 12px;
+}
+
+
+.srx-title {
+
+  margin-bottom: 11px;
+}
+
+
+/* ============================================================
+   TATTVA FLOW
+   ============================================================ */
+
+.srx-flow {
+
+  display: flex;
+
+  align-items: stretch;
+
+  gap: 5px;
+}
+
+
+.srx-node {
+
+  flex: 1;
+
+  min-width: 0;
+
+  padding: 10px 7px;
+
+  border-radius: 10px;
+
+  background: #18243a;
+
+  border:
+    1px solid #31415e;
+
+  text-align: center;
+}
+
+
+.srx-node b {
+
+  display: block;
+
+  font-size: 10px;
+}
+
+
+.srx-node span {
+
+  display: block;
+
+  margin-top: 4px;
+
+  font-size: 9px;
+
+  color: #91a2bc;
+
+  line-height: 1.25;
+}
+
+
+.srx-node.seed b {
+  color: #5ed7ff;
+}
+
+
+.srx-node.unfold b {
+  color: #ffd45e;
+}
+
+
+.srx-node.manifest b {
+  color: #69f27e;
+}
+
+
+.srx-arrow {
+
+  align-self: center;
+
+  color: #687c9b;
+
+  font-weight: 800;
+}
+
+
+.srx-quote {
+
+  margin-top: 10px;
+
+  padding: 9px;
+
+  border-left:
+    3px solid #4df06f;
+
+  background: #0c1525;
+
+  color: #c8d3e3;
+
+  font-size: 11px;
+
+  font-style: italic;
+}
+
+
+/* ============================================================
+   WEAKEST LINK
+   ============================================================ */
+
+.srx-weak {
+
+  display: flex;
+
+  gap: 10px;
+
+  align-items: center;
+
+  padding: 10px;
+
+  border-radius: 10px;
+
+  background: #0c1525;
+}
+
+
+.srx-weak-icon {
+
+  font-size: 23px;
+}
+
+
+.srx-weak div {
+
+  flex: 1;
+}
+
+
+.srx-weak b {
+
+  font-size: 12px;
+}
+
+
+.srx-weak strong {
+
+  font-size: 18px;
+
+  color: #ffcb55;
+}
+
+
+.srx-bars {
+
+  margin-top: 12px;
+}
+
+
+.srx-barrow {
+
+  display: grid;
+
+  grid-template-columns:
+    135px 1fr 30px;
+
+  gap: 6px;
+
+  align-items: center;
+
+  margin: 8px 0;
+
+  font-size: 9px;
+}
+
+
+.srx-barrow div {
+
+  height: 7px;
+
+  background: #202e46;
+
+  border-radius: 99px;
+
+  overflow: hidden;
+}
+
+
+.srx-barrow i {
+
+  display: block;
+
+  height: 100%;
+
+  background: #4df06f;
+
+  border-radius: 99px;
+}
+
+
+.srx-barrow b {
+
+  text-align: right;
+
+  color: #b7c4d7;
+}
+
+
+/* ============================================================
+   ACTION QUEUE
+   ============================================================ */
+
+.srx-action {
+
+  display: flex;
+
+  gap: 9px;
+
+  align-items: center;
+
+  padding: 9px 0;
+
+  border-bottom:
+    1px solid #202d43;
+}
+
+
+.srx-action:last-child {
+
+  border-bottom: 0;
+}
+
+
+.srx-rank {
+
+  width: 24px;
+
+  height: 24px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 7px;
+
+  background: #20304a;
+
+  color: #a9bbd3;
+
+  font-weight: 800;
+
+  font-size: 11px;
+}
+
+
+.srx-action div {
+
+  flex: 1;
+}
+
+
+.srx-action b {
+
+  font-size: 11px;
+}
+
+
+.srx-action p {
+
+  font-size: 9px;
+}
+
+
+.srx-action em {
+
+  font-style: normal;
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  padding: 4px 6px;
+
+  border-radius: 6px;
+
+  background: #293953;
+
+  color: #b9c7da;
+}
+
+
+.srx-action em.critical {
+
+  background: #4a1f2a;
+
+  color: #ff8195;
+}
+
+
+.srx-action em.high {
+
+  background: #4a3420;
+
+  color: #ffc767;
+}
+
+
+.srx-action em.medium {
+
+  background: #263b52;
+
+  color: #78c9ff;
+}
+
+
+/* ============================================================
+   METRICS
+   ============================================================ */
+
+.srx-metrics {
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 7px;
+}
+
+
+.srx-metrics span {
+
+  padding: 9px;
+
+  background: #0c1525;
+
+  border-radius: 8px;
+
+  color: #91a2bc;
+
+  font-size: 10px;
+}
+
+
+.srx-metrics b {
+
+  float: right;
+
+  color: #f1f5fb;
+}
+
+
+.srx-note {
+
+  font-size: 9px !important;
+
+  margin-top: 10px !important;
+}
+
+
+/* ============================================================
+   OPERATOR NOTE
+   ============================================================ */
+
+.srx textarea {
+
+  width: 100%;
+
+  min-height: 85px;
+
+  resize: vertical;
+
+  border:
+    1px solid #31415e;
+
+  border-radius: 9px;
+
+  background: #0a1322;
+
+  color: #e8eef9;
+
+  padding: 9px;
+
+  outline: none;
+
+  font:
+    11px Inter,
+    Segoe UI,
+    Arial,
+    sans-serif;
+}
+
+
+.srx-primary {
+
+  margin-top: 8px;
+
+  width: 100%;
+
+  padding: 9px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: #28d85b;
+
+  color: #06130a;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+.srx-saved {
+
+  margin-top: 7px;
+
+  color: #69f27e;
+
+  font-size: 9px;
+}
+
+
+/* ============================================================
+   LAUNCH BUTTON
+   ============================================================ */
+
+.srx-launcher {
+
+  position: fixed;
+
+  right: 14px;
+
+  bottom: 18px;
+
+  z-index: 2147483647;
+
+  border:
+    1px solid #4df06f;
+
+  background: #0e1b2b;
+
+  color: #4df06f;
+
+  padding: 10px 13px;
+
+  border-radius: 11px;
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, .35);
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  font-size: 12px;
+}
+
+
+.srx-launcher:hover {
+
+  background: #16283e;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+  .srx {
+
+    width: 92vw;
+
+    right: -94vw;
+  }
+
+  .srx.srx-open {
+
+    right: 0;
+  }
+
+}
