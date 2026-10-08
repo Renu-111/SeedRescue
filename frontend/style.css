@@ -1,586 +1,1643 @@
-* {
+/* ============================================================
+   SEEDRESCUE COMMAND CENTER
+   FINAL FRONTEND CSS
+   Designed for the existing index.html
+   DO NOT CHANGE app.js
+   ============================================================ */
+
+
+/* ============================================================
+   1. GLOBAL RESET
+   ============================================================ */
+
+*,
+*::before,
+*::after {
     box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f7fb;
-    color: #172033;
-}
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        Helvetica,
+        sans-serif;
 
-.topbar {
-    background: #102a43;
-    color: white;
-    padding: 22px 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-}
+    background: #07111f;
+    color: #e2e8f0;
 
-.topbar h1 {
-    font-size: 28px;
-    margin-bottom: 5px;
-}
+    overflow: hidden;
 
-.topbar p {
-    opacity: 0.8;
-}
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.status {
-    padding: 8px 14px;
-    border-radius: 20px;
-    font-size: 13px;
-}
-
-.status.online {
-    background: #d1fae5;
-    color: #065f46;
-}
-
-.status.offline {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.nav-button {
-    text-decoration: none;
-    background: white;
-    color: #102a43;
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-.container {
-    width: 90%;
-    max-width: 1400px;
-    margin: 30px auto;
-}
-
-.card {
-    background: white;
-    border-radius: 14px;
-    padding: 25px;
-    margin-bottom: 25px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
-}
-
-.section-title {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 22px;
-}
-
-.section-title h2 {
-    margin-bottom: 6px;
-}
-
-.section-title p {
-    color: #64748b;
-}
-
-.form-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+
+    /*
+       LEFT SIDEBAR | MAP | RIGHT SIDEBAR
+    */
+    grid-template-columns:
+        360px
+        minmax(650px, 1fr)
+        410px;
+
+    grid-template-rows:
+        68px
+        minmax(0, 1fr);
+
+    min-width: 1350px;
 }
 
-.input-group {
+
+/* ============================================================
+   2. HEADER
+   ============================================================ */
+
+header {
+    grid-column: 1 / 4;
+    grid-row: 1;
+
+    height: 68px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #0b1d32 0%,
+            #102a43 50%,
+            #0b1d32 100%
+        );
+
+    border-bottom: 1px solid #28445f;
+
+    box-shadow:
+        0 2px 12px rgba(0, 0, 0, 0.35);
+
+    position: relative;
+
+    z-index: 5000;
+}
+
+header > div:first-child {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+header b {
+    color: #4ade80;
+
+    font-size: 21px;
+    font-weight: 850;
+
+    white-space: nowrap;
+}
+
+header span {
+    margin-left: 10px;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    white-space: nowrap;
+}
+
+header > div:last-child {
+    flex-shrink: 0;
+}
+
+header a {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 10px 14px;
+
+    border: 1px solid #2c5575;
+    border-radius: 7px;
+
+    background: #102a43;
+
+    color: #7dd3fc;
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 750;
+
+    transition: 0.2s ease;
+}
+
+header a:hover {
+    background: #153b59;
+    border-color: #38bdf8;
+}
+
+
+/* ============================================================
+   3. LEFT + RIGHT SIDEBAR BASE
+   ============================================================ */
+
+body > aside {
+    min-width: 0;
+    min-height: 0;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: #334155 transparent;
+
+    background:
+        linear-gradient(
+            180deg,
+            #0a1729,
+            #071322
+        );
+}
+
+body > aside::-webkit-scrollbar {
+    width: 6px;
+}
+
+body > aside::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body > aside::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 8px;
+}
+
+
+/* ============================================================
+   4. LEFT SIDEBAR
+   ============================================================ */
+
+body > aside:first-of-type {
+    grid-column: 1;
+    grid-row: 2;
+
+    padding: 14px 8px 18px 14px;
+
+    border-right: 1px solid #263b55;
+
     display: flex;
     flex-direction: column;
-    gap: 7px;
+
+    gap: 8px;
 }
 
-.input-group label {
-    font-weight: bold;
-    font-size: 14px;
-}
 
-.input-group input,
-.input-group select {
-    padding: 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    font-size: 15px;
-    background: white;
-}
+/* ============================================================
+   LEFT SECTION TITLES
+   ============================================================ */
 
-.location-box {
-    margin-top: 25px;
-    padding: 20px;
-    border-radius: 12px;
-    background: #f8fafc;
-}
+body > aside:first-of-type > h4 {
+    margin: 0 0 3px !important;
 
-.location-box h3 {
-    margin-bottom: 5px;
-}
+    padding: 9px 10px;
 
-.location-box p {
-    color: #64748b;
-    margin-bottom: 18px;
-}
+    background: #102a43;
 
-.coordinate-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-}
+    border:
+        1px solid
+        #29445f;
 
-.button-row {
-    display: flex;
-    gap: 12px;
-    margin-top: 25px;
-}
+    border-radius: 7px;
 
-.primary-button,
-.secondary-button {
-    border: none;
-    padding: 13px 22px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 15px;
-}
+    color: #4ade80;
 
-.primary-button {
-    background: #0f766e;
-    color: white;
-}
-
-.primary-button:hover {
-    background: #115e59;
-}
-
-.secondary-button {
-    background: #e2e8f0;
-    color: #172033;
-}
-
-.metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-    margin-bottom: 25px;
-}
-
-.metric-card {
-    background: white;
-    border-radius: 14px;
-    padding: 22px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
-}
-
-.metric-card span {
-    display: block;
-    color: #64748b;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
-.metric-card strong {
-    display: block;
-    font-size: 30px;
-}
-
-.metric-card small {
-    color: #64748b;
-}
-
-.hazard-panel {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.hazard-badge {
-    min-width: 100px;
-    text-align: center;
-    padding: 14px 20px;
-    border-radius: 10px;
-    font-weight: bold;
-}
-
-.hazard-badge.red {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.hazard-badge.orange {
-    background: #ffedd5;
-    color: #9a3412;
-}
-
-.hazard-badge.yellow {
-    background: #fef9c3;
-    color: #854d0e;
-}
-
-.hazard-badge.green {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.road-summary {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-}
-
-.road-count {
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-}
-
-.road-count span {
-    display: block;
-    font-weight: bold;
-}
-
-.road-count strong {
-    display: block;
-    font-size: 30px;
-    margin-top: 8px;
-}
-
-.road-count.red {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.road-count.orange {
-    background: #ffedd5;
-    color: #9a3412;
-}
-
-.road-count.yellow {
-    background: #fef9c3;
-    color: #854d0e;
-}
-
-.road-count.green {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.legend {
-    display: flex;
-    gap: 25px;
-    margin: 20px 0;
-    flex-wrap: wrap;
-}
-
-.legend span {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-}
-
-.legend-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
-
-.red-dot {
-    background: #dc2626;
-}
-
-.orange-dot {
-    background: #f97316;
-}
-
-.yellow-dot {
-    background: #eab308;
-}
-
-.green-dot {
-    background: #16a34a;
-}
-
-.table-container {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-th {
-    background: #f8fafc;
-}
-
-.road-status {
-    padding: 5px 10px;
-    border-radius: 15px;
     font-size: 12px;
-    font-weight: bold;
+
+    font-weight: 850;
+
+    letter-spacing: 0.35px;
+
+    text-transform: uppercase;
 }
 
-.road-status.blocked {
-    background: #fee2e2;
-    color: #991b1b;
+
+/* ============================================================
+   LEFT LABELS
+   ============================================================ */
+
+body > aside:first-of-type > label {
+    display: block;
+
+    margin: 2px 2px 0;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    font-weight: 650;
 }
 
-.road-status.orange {
-    background: #ffedd5;
-    color: #9a3412;
+body > aside:first-of-type > label b {
+    color: #e2e8f0;
 }
 
-.road-status.yellow {
-    background: #fef9c3;
-    color: #854d0e;
+
+/* ============================================================
+   SELECT
+   ============================================================ */
+
+body > aside:first-of-type select {
+    width: 100%;
+
+    height: 38px;
+
+    padding: 0 10px;
+
+    border:
+        1px solid
+        #29445f;
+
+    border-radius: 7px;
+
+    outline: none;
+
+    background: #0a1829;
+
+    color: #e2e8f0;
+
+    font-size: 12px;
 }
 
-.road-status.safe {
-    background: #dcfce7;
-    color: #166534;
+body > aside:first-of-type select:focus {
+    border-color: #38bdf8;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(56, 189, 248, 0.12);
 }
+
+
+/* ============================================================
+   NUMBER INPUTS
+   ============================================================ */
+
+body > aside:first-of-type input[type="number"] {
+    width: 100%;
+
+    height: 38px;
+
+    padding: 0 10px;
+
+    border:
+        1px solid
+        #29445f;
+
+    border-radius: 7px;
+
+    outline: none;
+
+    background: #0a1829;
+
+    color: #e2e8f0;
+
+    font-size: 12px;
+}
+
+body > aside:first-of-type input[type="number"]:focus {
+    border-color: #38bdf8;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(56, 189, 248, 0.12);
+}
+
+
+/* ============================================================
+   RANGE SLIDERS
+   ============================================================ */
+
+body > aside:first-of-type input[type="range"] {
+    width: 100%;
+
+    margin: 0;
+
+    accent-color: #22c55e;
+
+    cursor: pointer;
+}
+
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+body > aside:first-of-type button {
+    width: 100%;
+
+    min-height: 38px;
+
+    padding: 8px 10px;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: 750;
+
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease;
+}
+
+body > aside:first-of-type button:hover {
+    transform: translateY(-1px);
+
+    filter: brightness(1.08);
+}
+
+
+/* ============================================================
+   WEATHER
+   ============================================================ */
+
+.btn-weather {
+    background: #0284c7 !important;
+
+    border-color: #0ea5e9 !important;
+}
+
+
+/* ============================================================
+   HAZARD
+   ============================================================ */
+
+.btn-hazard {
+    background: #dc2626 !important;
+
+    border-color: #ef4444 !important;
+}
+
+
+/* ============================================================
+   BOTTLENECK
+   ============================================================ */
+
+.btn-bottleneck {
+    background: #9a3412 !important;
+
+    border-color: #f97316 !important;
+}
+
+
+/* ============================================================
+   COMPARE
+   ============================================================ */
+
+.btn-compare {
+    background: #166534 !important;
+
+    border-color: #22c55e !important;
+}
+
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+
+.btn-print {
+    background: #166534 !important;
+
+    border-color: #22c55e !important;
+}
+
+
+/* ============================================================
+   LOCATION STATUS
+   ============================================================ */
+
+.location-status {
+    padding: 9px 10px;
+
+    border-radius: 7px;
+
+    background: #0c1d30;
+
+    border:
+        1px solid
+        #334155;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    line-height: 1.45;
+}
+
+.location-status.waiting {
+    border-color: #f59e0b;
+
+    color: #fde68a;
+}
+
+.location-status.ready {
+    border-color: #22c55e;
+
+    color: #bbf7d0;
+
+    background: #0b2118;
+}
+
+
+/* ============================================================
+   5. BLOCKED ROAD SEGMENTS
+   ============================================================ */
+
+body > aside:first-of-type > label:last-of-type {
+    margin-top: 8px !important;
+
+    padding:
+        10px
+        10px
+        7px;
+
+    background: #102a43;
+
+    border:
+        1px solid
+        #29445f;
+
+    border-bottom: none;
+
+    border-radius:
+        7px
+        7px
+        0
+        0;
+
+    color: #4ade80;
+
+    font-size: 12px !important;
+
+    font-weight: 850 !important;
+
+    text-transform: uppercase;
+}
+
+
+/* ============================================================
+   ROAD LIST
+   ============================================================ */
+
+.roads {
+    width: 100%;
+
+    height: 270px;
+
+    min-height: 220px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 7px;
+
+    background: #081625;
+
+    border:
+        1px solid
+        #29445f;
+
+    border-radius:
+        0
+        0
+        7px
+        7px;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        #475569
+        transparent;
+}
+
+.roads::-webkit-scrollbar {
+    width: 5px;
+}
+
+.roads::-webkit-scrollbar-thumb {
+    background: #475569;
+
+    border-radius: 8px;
+}
+
+
+/*
+   IMPORTANT:
+   Do not let the road labels inherit
+   giant flex/grid dimensions.
+*/
+
+.roads label {
+    display: flex !important;
+
+    align-items: center;
+
+    width: 100%;
+
+    min-height: 35px;
+
+    margin: 0 0 6px !important;
+
+    padding: 7px 8px;
+
+    background: #0c1d31;
+
+    border:
+        1px solid
+        #253d56;
+
+    border-radius: 6px;
+
+    color: #cbd5e1 !important;
+
+    font-size: 10px !important;
+
+    line-height: 1.2;
+
+    cursor: pointer;
+
+    overflow: hidden;
+}
+
+.roads label:hover {
+    background: #122941;
+
+    border-color: #f97316;
+}
+
+.roads input[type="checkbox"] {
+    flex: 0 0 auto;
+
+    width: 14px !important;
+    height: 14px !important;
+
+    margin:
+        0
+        7px
+        0
+        0 !important;
+
+    accent-color: #ef4444;
+}
+
+
+/* ============================================================
+   LEFT STATUS
+   ============================================================ */
+
+.status {
+    padding: 8px 10px;
+
+    border:
+        1px solid
+        #263b55;
+
+    border-radius: 7px;
+
+    background: #0c1b2d;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    line-height: 1.35;
+}
+
+
+/* ============================================================
+   6. CENTER MAP
+   ============================================================ */
 
 #map {
+    grid-column: 2;
+    grid-row: 2;
+
     width: 100%;
-    height: 500px;
-    min-height: 500px;
-    border-radius: 12px;
-    overflow: hidden;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    background: #0f172a;
+
     position: relative;
+
     z-index: 1;
 }
 
-.resource-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+.leaflet-container {
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
 }
 
-.resource-card {
-    padding: 20px;
-    border-radius: 10px;
-    background: #f8fafc;
-}
 
-.resource-card h3 {
-    margin-bottom: 12px;
-}
+/* ============================================================
+   MAP LEGEND
+   ============================================================ */
 
-.resource-card p {
-    margin: 8px 0;
-}
+.legend {
+    position: fixed;
 
-.zone-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-}
+    left:
+        calc(
+            360px +
+            (100vw - 360px - 410px) / 2
+        );
 
-.zone-card {
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 20px;
-}
+    bottom: 10px;
 
-.zone-card h3 {
-    margin-bottom: 12px;
-}
+    transform: translateX(-50%);
 
-.zone-card p {
-    margin: 7px 0;
-}
+    z-index: 2000;
 
-.priority-item {
-    padding: 15px;
-    margin-bottom: 10px;
-    background: #f8fafc;
-    border-radius: 8px;
     display: flex;
-    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 8px 12px;
+
+    background:
+        rgba(8, 20, 35, 0.95);
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 7px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(0, 0, 0, 0.4);
+
+    color: #cbd5e1;
+
+    font-size: 10px;
+
+    white-space: nowrap;
 }
 
-.explanation {
-    background: #f8fafc;
-    padding: 20px;
-    border-radius: 10px;
-    line-height: 1.7;
+
+/* ============================================================
+   7. RIGHT SIDEBAR
+   ============================================================ */
+
+body > aside:last-of-type {
+    grid-column: 3;
+    grid-row: 2;
+
+    padding:
+        12px
+        10px
+        18px
+        12px;
+
+    border-left:
+        1px solid
+        #263b55;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    overflow-y: auto;
 }
 
-.comparison-inputs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px;
-    margin-bottom: 25px;
+
+/* ============================================================
+   RIGHT PANEL ORDER
+   ============================================================ */
+
+/*
+   Existing HTML order is:
+
+   Zone Priority
+   Operational
+   KPI
+   AI
+   Briefing
+   Bottleneck
+   Recovery
+   Priority list
+   Risk
+   Why
+   Shelter
+   Allocation
+   Resource
+   Short
+
+   We visually reorder it into:
+
+   Shelter Audit
+   Zone Priority
+   Operational Intelligence
+   KPI
+   AI Commander
+   Briefing
+   Bottlenecks
+   Recovery Priorities
+   Risk Breakdown
+   Resource Shortages
+*/
+
+
+/* Shelter heading */
+body > aside:last-of-type > h4:has(+ #alloc) {
+    order: 1;
 }
 
-.scenario-card {
-    padding: 22px;
-    background: #f8fafc;
-    border-radius: 12px;
+/* Shelter table */
+body > aside:last-of-type > #alloc {
+    order: 2;
 }
 
-.scenario-card h3 {
-    margin-bottom: 18px;
+
+/* Zone Priority */
+body > aside:last-of-type > .priority-panel {
+    order: 3;
 }
 
-.scenario-card .input-group {
-    margin-bottom: 14px;
+
+/* Operational Intelligence heading */
+body > aside:last-of-type > h4:has(+ #kpis) {
+    order: 4;
 }
 
-.json-box {
-    background: #0f172a;
-    color: #e2e8f0;
-    padding: 20px;
-    border-radius: 10px;
-    overflow-x: auto;
+
+/* KPI */
+body > aside:last-of-type > #kpis {
+    order: 5;
 }
 
-.loading {
-    text-align: center;
-    padding: 30px;
+
+/* AI Commander heading */
+body > aside:last-of-type > h4:has(+ #briefing) {
+    order: 6;
 }
 
-.spinner {
-    width: 35px;
-    height: 35px;
-    border: 4px solid #cbd5e1;
-    border-top-color: #0f766e;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: auto auto 12px;
+
+/* AI briefing */
+body > aside:last-of-type > #briefing {
+    order: 7;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+
+/* Bottleneck */
+body > aside:last-of-type > #bottleneckSection {
+    order: 8;
 }
 
-.error-box {
-    background: #fee2e2;
-    color: #991b1b;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
+
+/* Recovery Priorities heading */
+body > aside:last-of-type > h4:has(+ #prio) {
+    order: 9;
 }
 
-.hidden {
-    display: none !important;
+
+/* Recovery Priorities */
+body > aside:last-of-type > #prio {
+    order: 10;
 }
 
-footer {
-    text-align: center;
-    padding: 25px;
-    color: #64748b;
+
+/* Risk Breakdown heading */
+body > aside:last-of-type > h4:has(+ #why) {
+    order: 11;
 }
 
-@media (max-width: 900px) {
 
-    .form-grid,
-    .metrics-grid,
-    .road-summary {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .resource-grid,
-    .zone-grid,
-    .comparison-inputs {
-        grid-template-columns: 1fr;
-    }
-
-    .topbar {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+/* Risk breakdown */
+body > aside:last-of-type > #why {
+    order: 12;
 }
 
-@media (max-width: 600px) {
 
-    .form-grid,
-    .metrics-grid,
-    .road-summary,
-    .coordinate-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .container {
-        width: 95%;
-    }
+/* Resource heading */
+body > aside:last-of-type > h4:has(+ #short) {
+    order: 13;
 }
+
+
+/* Resource shortage */
+body > aside:last-of-type > #short {
+    order: 14;
+}
+
+
+/* ============================================================
+   8. SHELTER ALLOCATION AUDIT
+   ============================================================ */
+
+body > aside:last-of-type > h4:has(+ #alloc) {
+    margin: 0 !important;
+
+    padding:
+        9px
+        10px;
+
+    background: #102a43;
+
+    border:
+        1px solid
+        #29445f;
+
+    border-radius:
+        7px
+        7px
+        0
+        0;
+
+    color: #4ade80;
+
+    font-size: 12px;
+
+    font-weight: 850;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.35px;
+}
+
+
+/* ============================================================
+   ALLOCATION TABLE
+   ============================================================ */
+
+#alloc {
+    width: 100%;
+
+    margin: 0;
+
+    border:
+        1px solid
+        #29445f;
+
+    border-top: none;
+
+    border-collapse: separate;
+
+    border-spacing: 0;
+
+    background: #081625;
+
+    border-radius:
+        0
+        0
+        7px
+        7px;
+
+    overflow: hidden;
+
+    table-layout: fixed;
+}
+
+#alloc th {
+    padding: 8px 7px;
+
+    background: #132b45;
+
+    color: #7dd3fc;
+
+    border-bottom:
+        1px solid
+        #36506b;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    text-align: left;
+
+    text-transform: uppercase;
+}
+
+#alloc td {
+    padding: 8px 7px;
+
+    color: #cbd5e1;
+
+    border-bottom:
+        1px solid
+        #20364d;
+
+    font-size: 9px;
+
+    line-height: 1.25;
+
+    vertical-align: top;
+
+    word-break: break-word;
+}
+
+#alloc tr:last-child td {
+    border-bottom: none;
+}
+
+#alloc tr:hover td {
+    background: #10253b;
+}
+
+#alloc th:nth-child(1),
+#alloc td:nth-child(1) {
+    width: 25%;
+}
+
+#alloc th:nth-child(2),
+#alloc td:nth-child(2) {
+    width: 55%;
+}
+
+#alloc th:nth-child(3),
+#alloc td:nth-child(3) {
+    width: 20%;
+}
+
+
+/* ============================================================
+   9. ZONE PRIORITY PANEL
+   ============================================================ */
 
 .priority-panel {
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 14px;
-    background: #ffffff;
+    width: 100%;
+
+    margin: 0;
+
+    padding: 11px;
+
+    background: #0d1c2e;
+
+    border:
+        1px solid
+        #29445f;
+
+    border-radius: 8px;
+}
+
+.priority-panel h2 {
+    margin: 0 0 3px;
+
+    color: #4ade80;
+
+    font-size: 14px;
+
+    font-weight: 850;
 }
 
 .section-description {
-    color: #666;
-    margin-bottom: 15px;
+    margin: 0 0 9px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    line-height: 1.35;
 }
+
+
+/* ============================================================
+   10. ZONE PRIORITY LIST
+   ============================================================ */
+
+#zonePriorityList {
+    width: 100%;
+
+    min-width: 0;
+}
+
+
+/*
+   THIS IS THE MAIN FIX FOR THE ORANGE BLOCK.
+*/
 
 .zone-priority-card {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 15px;
-    margin-bottom: 12px;
-    border-radius: 12px;
-    border-left: 5px solid #999;
+    width: 100%;
+
+    min-width: 0;
+
+    margin: 0 0 7px;
+
+    padding: 9px 9px 8px;
+
+    background: #091727 !important;
+
+    border:
+        1px solid
+        #263e56;
+
+    border-left:
+        4px solid
+        #64748b;
+
+    border-radius: 7px;
+
+    color: #cbd5e1;
+
+    overflow: hidden;
+
+    display: block !important;
 }
 
+
+/* Priority colors */
+
 .zone-priority-card.critical {
-    border-left-color: #d32f2f;
+    border-left-color: #ef4444;
 }
 
 .zone-priority-card.high {
-    border-left-color: #f57c00;
+    border-left-color: #f97316;
 }
 
 .zone-priority-card.medium {
-    border-left-color: #fbc02d;
+    border-left-color: #eab308;
 }
 
 .zone-priority-card.low {
-    border-left-color: #388e3c;
+    border-left-color: #22c55e;
+}
+
+
+/* ============================================================
+   PRIORITY TOP ROW
+   ============================================================ */
+
+.priority-top {
+    width: 100%;
+
+    min-width: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 8px;
 }
 
 .priority-rank {
-    font-size: 24px;
-    font-weight: bold;
+    min-width: 0;
+
+    color: #f8fafc;
+
+    font-size: 13px;
+
+    font-weight: 850;
+
+    line-height: 1.2;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
 }
 
-.priority-info {
-    flex: 1;
+.priority-score {
+    flex: 0 0 auto;
+
+    color: #38bdf8;
+
+    font-size: 15px;
+
+    font-weight: 850;
 }
 
-.priority-info h3 {
-    margin: 0 0 5px 0;
-}
+
+/* ============================================================
+   HIGH / MEDIUM / LOW BADGE
+   ============================================================ */
 
 .priority-level {
-    font-weight: bold;
+    display: inline-block !important;
+
+    width: auto !important;
+
+    height: auto !important;
+
+    min-width: 0 !important;
+
+    max-width: max-content !important;
+
+    margin-top: 5px !important;
+
+    padding:
+        3px
+        6px !important;
+
+    border-radius: 4px !important;
+
+    color: #ffffff !important;
+
+    background: #64748b;
+
+    font-size: 8px !important;
+
+    line-height: 1 !important;
+
+    font-weight: 850 !important;
+
+    white-space: nowrap !important;
+
+    position: static !important;
+
+    float: none !important;
 }
 
-.why-zone-btn {
-    border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
-    cursor: pointer;
+.priority-level.critical {
+    background: #dc2626 !important;
+}
+
+.priority-level.high {
+    background: #f97316 !important;
+}
+
+.priority-level.medium {
+    background: #eab308 !important;
+
+    color: #111827 !important;
+}
+
+.priority-level.low {
+    background: #16a34a !important;
+}
+
+
+/* ============================================================
+   PRIORITY METRICS
+   ============================================================ */
+
+.priority-metrics {
+    width: 100%;
+
+    margin-top: 7px;
+
+    display: grid !important;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap:
+        4px
+        8px;
+
+    color: #aebdca;
+
+    font-size: 9px;
+
+    line-height: 1.35;
+}
+
+.priority-metrics > div {
+    min-width: 0;
+}
+
+.priority-metrics b {
+    color: #e2e8f0;
+
+    font-weight: 750;
+}
+
+
+/* ============================================================
+   WHY THIS ZONE
+   ============================================================ */
+
+.zone-priority-card > div[style] {
+    margin-top: 7px !important;
+
+    color: #38bdf8 !important;
+
+    font-size: 10px !important;
+
+    font-weight: 750 !important;
+
+    line-height: 1.2 !important;
+}
+
+
+/* ============================================================
+   PRIORITY REASONS
+   ============================================================ */
+
+.priority-reasons {
+    margin:
+        4px
+        0
+        0;
+
+    padding-left: 15px;
+
+    color: #b8c5d1;
+
+    font-size: 9px;
+
+    line-height: 1.35;
+}
+
+.priority-reasons li {
+    margin-bottom: 2px;
+}
+
+
+/* ============================================================
+   EMPTY PRIORITY STATE
+   ============================================================ */
+
+.priority-empty {
+    padding: 8px 2px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    line-height: 1.4;
+}
+
+
+/* ============================================================
+   11. RIGHT PANEL SECTION TITLES
+   ============================================================ */
+
+body > aside:last-of-type > h4 {
+    margin: 2px 0 0;
+
+    padding:
+        8px
+        9px;
+
+    background: #102a43;
+
+    border:
+        1px solid
+        #29445f;
+
+    border-radius: 7px;
+
+    color: #4ade80;
+
+    font-size: 11px;
+
+    font-weight: 850;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.35px;
+}
+
+
+/* ============================================================
+   12. OPERATIONAL KPIs
+   ============================================================ */
+
+#kpis {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 6px;
+}
+
+.k {
+    min-width: 0;
+
+    padding: 8px;
+
+    background: #0c1c2e;
+
+    border:
+        1px solid
+        #263d55;
+
+    border-left:
+        3px solid
+        #38bdf8;
+
+    border-radius: 6px;
+}
+
+.k small {
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 8px;
+}
+
+.k div {
+    margin-top: 3px;
+
+    color: #f8fafc;
+
+    font-size: 15px;
+
+    font-weight: 850;
+}
+
+
+/* ============================================================
+   13. AI COMMANDER
+   ============================================================ */
+
+.card-box {
+    width: 100%;
+
+    padding: 9px;
+
+    background: #0c1c2e;
+
+    border:
+        1px solid
+        #263d55;
+
+    border-radius: 7px;
+
+    color: #cbd5e1;
+
+    font-size: 9px;
+
+    line-height: 1.45;
+}
+
+#briefing {
+    max-height: 210px;
+
+    overflow-y: auto;
+}
+
+
+/* ============================================================
+   14. BOTTLENECKS
+   ============================================================ */
+
+#bottleneckSection {
+    width: 100%;
+
+    min-width: 0;
+}
+
+#bottleneckResults {
+    max-height: 180px;
+
+    overflow-y: auto;
+}
+
+
+/* ============================================================
+   15. RECOVERY PRIORITIES
+   ============================================================ */
+
+#prio {
+    margin:
+        0
+        0
+        0
+        18px;
+
+    padding-left: 14px;
+
+    color: #cbd5e1;
+
+    font-size: 9px;
+
+    line-height: 1.45;
+}
+
+#prio li {
+    margin-bottom: 4px;
+}
+
+
+/* ============================================================
+   16. RISK BREAKDOWN
+   ============================================================ */
+
+#why {
+    width: 100%;
+
+    padding: 9px;
+
+    background: #0c1c2e;
+
+    border:
+        1px solid
+        #263d55;
+
+    border-radius: 7px;
+
+    color: #cbd5e1;
+
+    font-size: 9px;
+
+    line-height: 1.45;
+}
+
+
+/* ============================================================
+   17. RESOURCE SHORTAGES
+   ============================================================ */
+
+#short {
+    width: 100%;
+
+    padding: 9px;
+
+    background: #0c1c2e;
+
+    border:
+        1px solid
+        #263d55;
+
+    border-radius: 7px;
+
+    color: #cbd5e1;
+
+    font-size: 9px;
+
+    line-height: 1.45;
+}
+
+
+/* ============================================================
+   18. DELTA / STATUS HELPERS
+   ============================================================ */
+
+.d {
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 8px;
+
+    font-weight: 750;
+}
+
+.up {
+    color: #f87171;
+}
+
+.dn {
+    color: #4ade80;
+}
+
+
+/* ============================================================
+   19. LEAFLET POPUPS
+   ============================================================ */
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+    background: #0f172a;
+
+    color: #e2e8f0;
+}
+
+.leaflet-popup-content {
+    font-size: 10px;
+}
+
+.leaflet-popup-content strong {
+    color: #4ade80;
+}
+
+
+/* ============================================================
+   20. MAP CONTROLS
+   ============================================================ */
+
+.leaflet-control-zoom a {
+    color: #0f172a !important;
+}
+
+
+/* ============================================================
+   21. RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1450px) {
+
+    body {
+        grid-template-columns:
+            340px
+            minmax(600px, 1fr)
+            390px;
+
+        min-width: 1330px;
+    }
+
+    .legend {
+        left:
+            calc(
+                340px +
+                (100vw - 340px - 390px) / 2
+            );
+    }
+}
+
+
+/* ============================================================
+   22. PRINT
+   ============================================================ */
+
+@media print {
+
+    html,
+    body {
+        height: auto;
+
+        overflow: visible;
+
+        background: white;
+    }
+
+    body {
+        display: block;
+
+        min-width: 0;
+    }
+
+    header,
+    body > aside:first-of-type,
+    #map,
+    .legend,
+    button {
+        display: none !important;
+    }
+
+    body > aside:last-of-type {
+        display: block;
+
+        width: 100%;
+
+        height: auto;
+
+        overflow: visible;
+
+        background: white;
+
+        color: black;
+
+        border: none;
+    }
+
+    body > aside:last-of-type > * {
+        break-inside: avoid;
+    }
+
+    .priority-panel,
+    .zone-priority-card,
+    .card-box,
+    #alloc,
+    #why,
+    #short,
+    .k {
+        background: white !important;
+
+        color: black !important;
+
+        border-color: #cbd5e1 !important;
+    }
+
+    h4,
+    h2,
+    .priority-rank,
+    .priority-score {
+        color: #111827 !important;
+    }
 }
