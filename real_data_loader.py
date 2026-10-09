@@ -82,7 +82,7 @@ def _feature_records(filename):
 @lru_cache(maxsize=1)
 def load_dataset():
     """Load and cache the real Bengaluru road/facility/population dataset."""
-    graph = nx.read_graphml(DATA_DIR / "roads.graphml")
+    graph = nx.read_graphml(DATA_DIR / "roads.graphml.gz")
     # Keep node IDs as strings and numeric coordinates as floats.
     for node, attrs in graph.nodes(data=True):
         attrs["x"] = float(attrs.get("x"))
