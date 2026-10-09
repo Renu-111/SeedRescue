@@ -1,0 +1,26 @@
+# Exclude virtual environment
+venv/
+
+# Exclude Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Exclude old/dev directories (not needed for serving)
+backend_old/
+data_pipeline/
+docs/
+
+# Exclude data pipeline / offline scripts
+download_bengaluru.py
+extract_bengaluru.py
+export_population.py
+get_population.py
+engine_backup_before_real_data.py
+
+# Exclude ML training script (model is pre-trained; only inference runs on Vercel)
+ml/train.py
+
+# Exclude git
+.git/
