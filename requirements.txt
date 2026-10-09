@@ -55,7 +55,7 @@ pydantic_core==2.33.2
 Pygments==2.20.0
 pyogrio==0.11.1
 pyparsing==3.3.2
-pyproj==3.6.1
+pyproj>=3.6.1
 PySocks==1.7.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.0
